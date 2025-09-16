@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
 @layer base {
   :root {
+    /* Light Theme */
     --background: 0 0% 100%;
+    --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
     --card-foreground: 224 71.4% 4.1%;
     --popover: 0 0% 100%;
@@ -23,33 +29,88 @@
     --input: 220 13% 91%;
     --ring: 224 71.4% 4.1%;
     --radius: 0.5rem;
+
+    /* Form Builder Specific (from first file) */
+    --canvas: 0 0% 2%;
+    --canvas-foreground: 0 0% 96%;
+    --component-hover: 217 91% 60%;
+    --component-selected: 142 76% 36%;
+    --sidebar-bg: 0 0% 3%;
+    --toolbar: 0 0% 5%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 217 91% 60%;
+
+    /* Gradients (from first file) */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(142 76% 36%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 4%), hsl(0 0% 6%));
+    --gradient-glow: radial-gradient(circle, hsl(217 91% 60% / 0.1), transparent);
+
+    /* Shadows (from first file) */
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.2);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-component: 0 4px 16px hsl(0 0% 0% / 0.3);
   }
 
   .dark {
-    --background: 224 71.4% 4.1%;
-    --card: 224 71.4% 4.1%;
-    --card-foreground: 210 20% 98%;
-    --popover: 224 71.4% 4.1%;
-    --primary: 210 20% 98%;
-    --primary-foreground: 222.9 39.3% 11%;
-    --secondary: 215 27.9% 16.9%;
-    --secondary-foreground: 210 20% 98%;
-    --muted: 215 27.9% 16.9%;
-    --muted-foreground: 217.9 10.6% 64.9%;
-    --accent: 215 27.9% 16.9%;
-    --accent-foreground: 210 20% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 20% 98%;
-    --border: 215 27.9% 16.9%;
-    --input: 215 27.9% 16.9%;
-    --ring: 216 12.2% 83.9%;
-  }
-}
+    /* Dark Form Builder Theme */
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 6%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 12%;
+    --input: 0 0% 8%;
+    --ring: 217 91% 60%;
+    --radius: 0.5rem;
 
-@layer base {
+    /* Form Builder Specific */
+    --canvas: 0 0% 2%;
+    --canvas-foreground: 0 0% 96%;
+    --component-hover: 217 91% 60%;
+    --component-selected: 142 76% 36%;
+    --sidebar-bg: 0 0% 3%;
+    --toolbar: 0 0% 5%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 217 91% 60%;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(142 76% 36%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 4%), hsl(0 0% 6%));
+    --gradient-glow: radial-gradient(circle, hsl(217 91% 60% / 0.1), transparent);
+
+    /* Shadows */
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.2);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-component: 0 4px 16px hsl(0 0% 0% / 0.3);
+  }
+
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
