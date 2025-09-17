@@ -1,8 +1,10 @@
-import { ClerkProvider } from "@clerk/nextjs";
+import { ClerkProvider, UserButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/Providers/ThemeProviders";
+import Logo from "@/components/Logo";
+import ThemeSwitcher from "@/components/ThemeSwitcher";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -25,6 +27,15 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
+              <Logo />
+              <div className="flex gap-4 items-center">
+                <ThemeSwitcher />
+                {/* <span className="bg-green-500 text-white px-8 py-4 rounded"> */}
+                  <UserButton afterSignOutUrl="/sign-in" />
+                {/* </span> */}
+              </div>
+            </nav>
             {children}
           </ThemeProvider>
         </body>

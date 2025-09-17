@@ -1,14 +1,17 @@
 "use server";
+
 import { currentUser } from "@clerk/nextjs/server";
-import Prisma from "@/lib/client"
-class UserNotFoundError extends Error { }
+import prisma from "@/lib/client";
+import { redirect } from "next/navigation";
 
 export async function GetFormsStats() {
   const user = await currentUser();
+
   if (!user) {
-    throw new UserNotFoundError();
+    redirect("/sign-in");
   }
-  const stats = await Prisma.Form.aggregate({
+
+  const stats = await prisma.form.aggregate({
     where: {
       userId: user.id,
     },
@@ -25,6 +28,7 @@ export async function GetFormsStats() {
   if (visits > 0) {
     submissionRate = (submissions / visits) * 100;
   }
+
   const bounceRate = 100 - submissionRate;
 
   return { visits, submissions, submissionRate, bounceRate };
