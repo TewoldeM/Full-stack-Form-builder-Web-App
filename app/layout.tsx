@@ -5,6 +5,8 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/Providers/ThemeProviders";
 import Logo from "@/components/Logo";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
+import { Toaster } from "@/components/ui/toaster";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -31,12 +33,11 @@ export default function RootLayout({
               <Logo />
               <div className="flex gap-4 items-center">
                 <ThemeSwitcher />
-                {/* <span className="bg-green-500 text-white px-8 py-4 rounded"> */}
-                  <UserButton afterSignOutUrl="/sign-in" />
-                {/* </span> */}
+                <UserButton afterSignOutUrl="/sign-in" />
               </div>
             </nav>
             {children}
+            <Toaster />
           </ThemeProvider>
         </body>
       </html>

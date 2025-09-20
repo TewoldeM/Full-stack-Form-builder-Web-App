@@ -3,6 +3,7 @@
 import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import { redirect } from "next/navigation";
+import { formSchema, formSchemaType } from "@/schema/form";
 
 export async function GetFormsStats() {
   const user = await currentUser();
@@ -32,4 +33,46 @@ export async function GetFormsStats() {
   const bounceRate = 100 - submissionRate;
 
   return { visits, submissions, submissionRate, bounceRate };
+}
+
+export async function CreateForm(data:formSchemaType) {
+  const validation = formSchema.safeParse(data)
+  if (!validation.success) {
+     throw new Error("form not valid")
+  }
+  
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
+  }
+  const { name, description } = data;
+  const form = await prisma.form.create({
+    data: {
+      userId: user.id,
+      name,
+      description,
+    }
+  })
+  
+  if(!form){
+    throw new Error("something went wrong")
+  }
+
+  return form;
+}
+
+export async function GetForms() {
+
+    const user = await currentUser();
+    if (!user) {
+      redirect("/sign-in");
+  }
+   return await prisma.form.findMany({
+    where: {
+      userId: user.id,
+     },
+     orderBy: {
+       createdAt:"desc"
+     }
+  })
 }
