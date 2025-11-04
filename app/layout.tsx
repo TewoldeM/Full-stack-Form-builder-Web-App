@@ -8,6 +8,7 @@ import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { Toaster } from "@/components/ui/toaster";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import DesignerContextProvider from "@/components/context/DesignerContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,6 +26,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en">
         <body className={inter.className}>
+          <DesignerContextProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="system"
@@ -46,7 +48,8 @@ export default function RootLayout({
             </nav>
             {children}
             <Toaster />
-          </ThemeProvider>
+            </ThemeProvider>
+          </DesignerContextProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -1,14 +1,28 @@
-import React from "react";
+import React, { useState } from "react";
 import DesignerSideBar from "./DesignerSideBar";
-import {useDroppable} from "@dnd-kit/core"
+import {DragEndEvent, useDndMonitor, useDroppable} from "@dnd-kit/core"
 import { cn } from "@/lib/utils";
+import { ElementsType,FormElements } from "./FormElements";
+import useDesignere from "./hooks/useDesignere";
 const Designer = () => {
+  const {elements,addElement}= useDesignere()
     const dropable = useDroppable({
       id: "designer-drop-area",
       data: {
         isDesignerDropArea: true,
       },
     });
+  useDndMonitor({
+    onDragEnd: (event:DragEndEvent) => {
+      const { active, over } = event;
+      if (!active || !over) return;
+      const isDesignerBtnElement = active.data?.current?.isDesignerBtnElement;
+      if (isDesignerBtnElement) {
+        const type = active.data?.current?.type;
+        const newElement=FormElements[type as ElementsType].construct(idGenerater())
+      }
+    }
+  })
   return (
     <div className="flex w-full h-full">
       <div className="p-4 w-full">

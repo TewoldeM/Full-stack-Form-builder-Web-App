@@ -1,3 +1,4 @@
+"use client"
 import { Form } from "@prisma/client";
 import React from "react";
 import PreviewDialogBtn from "./PreviewDialogBtn";
@@ -25,12 +26,11 @@ const FormBuilder = ({ form }: { form: Form }) => {
             )}
           </div>
         </nav>
-        <div className="flex w-full flex-grow items-center justify-center relative overflow-auto h-[200px] bg-accent">
+        <div className="flex w-full h-fit flex-grow items-center justify-center relative overflow-auto bg-accent bg-cover bg-[radial-gradient(ellipse_at_top,#f8fafc,#e2e8f0_60%)] dark:bg-[radial-gradient(ellipse_at_top,#1a1f2b,#0e1117_60%)]">
           <Designer />
         </div>
       </main>
       <DragOverlayWrapper />
-      
     </DndContext>
   );
 };
