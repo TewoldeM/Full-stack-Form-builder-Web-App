@@ -6,6 +6,8 @@ import { ThemeProvider } from "@/components/Providers/ThemeProviders";
 import Logo from "@/components/Logo";
 import ThemeSwitcher from "@/components/ThemeSwitcher";
 import { Toaster } from "@/components/ui/toaster";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +33,13 @@ export default function RootLayout({
           >
             <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
               <Logo />
+
               <div className="flex gap-4 items-center">
+                <Link href={"/dashboard"}>
+                  <Button className="flex flex-row justify-end items-center ">
+                    Dashboard
+                  </Button>
+                </Link>
                 <ThemeSwitcher />
                 <UserButton afterSignOutUrl="/sign-in" />
               </div>

@@ -1,3 +1,4 @@
+"use client"
 import { Active, DragOverlay, useDndMonitor } from "@dnd-kit/core";
 import React, { useState } from "react";
 import { FormElement } from '../app/FormBuilder/page';

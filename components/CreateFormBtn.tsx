@@ -42,7 +42,8 @@ function CreateFormBtn() {
         title: "success",
         description: "Form created successfully",
       });
-      router.push(`/builder/${formId}`);
+      router.push(`/builder/${formId.id}`);
+
     } catch (error) {
       toast({
         title: "Error",
