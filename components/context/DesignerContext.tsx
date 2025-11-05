@@ -4,8 +4,9 @@ import { createContext, ReactNode, useState } from "react"
 import {FormElementInstance } from "../FormElements"
 
 type DesignerContextType = {
-    elements: FormElementInstance[]
-    addElement:(index:number,element:FormElementInstance)=>void
+    elements: FormElementInstance[];
+    addElement: (index: number, element: FormElementInstance) => void;
+    removeElement: { id: string } => void: any;
 }
 
 export const DesignereContext = createContext<DesignerContextType | null>(null)
@@ -19,9 +20,12 @@ export default function DesignerContextProvider({ children }: { children:ReactNo
             return newElements;
         });
     }
+    const removeElement = (id: string) => {
+        setElements((prev)=>prev.filter((element)=>element.id !== id))
+    }
     return (
 
-        <DesignereContext.Provider value={{ elements, addElement }}>
+        <DesignereContext.Provider value={{ elements, addElement, removeElement }}>
             {children}
         </DesignereContext.Provider>
     )

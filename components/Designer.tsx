@@ -1,28 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import DesignerSideBar from "./DesignerSideBar";
-import {DragEndEvent, useDndMonitor, useDroppable} from "@dnd-kit/core"
+import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
-import { ElementsType,FormElements } from "./FormElements";
+import {
+  ElementsType,
+  FormElementInstance,
+  FormElements,
+} from "./FormElements";
 import useDesignere from "./hooks/useDesignere";
+import { idGenerater } from "@/lib/idGenerater";
+import { BiSolidTrash } from "react-icons/bi";
+import { Button } from "./ui/button";
+
 const Designer = () => {
-  const {elements,addElement}= useDesignere()
-    const dropable = useDroppable({
-      id: "designer-drop-area",
-      data: {
-        isDesignerDropArea: true,
-      },
-    });
+  const { elements, addElement } = useDesignere() || {};
+  const dropable = useDroppable({
+    id: "designer-drop-area",
+    data: {
+      isDesignerDropArea: true,
+    },
+  });
+
   useDndMonitor({
-    onDragEnd: (event:DragEndEvent) => {
+    onDragEnd: (event: DragEndEvent) => {
       const { active, over } = event;
       if (!active || !over) return;
+
       const isDesignerBtnElement = active.data?.current?.isDesignerBtnElement;
       if (isDesignerBtnElement) {
         const type = active.data?.current?.type;
-        const newElement=FormElements[type as ElementsType].construct(idGenerater())
+        const newElement = FormElements[type as ElementsType].construct(
+          idGenerater()
+        );
+        addElement(0, newElement);
       }
-    }
-  })
+    },
+  });
+
   return (
     <div className="flex w-full h-full">
       <div className="p-4 w-full">
@@ -33,24 +47,96 @@ const Designer = () => {
           )}
           ref={dropable.setNodeRef}
         >
-          {!dropable.over && (
+          {!dropable.over && elements.length === 0 && (
             <p className="text-3xl text-muted-foreground flex flex-grow items-center font-bold">
               Drop here
             </p>
           )}
           {dropable.over && (
             <div className="p-4 w-full">
-              <div className="h-[120px] rounded-md bg-primary/20">
-
-              </div>
+              <div className="h-[120px] rounded-md bg-primary/20"></div>
             </div>
-              
-            )}
+          )}
+          {elements.length > 0 && (
+            <div className="flex flex-col w-full gap-2 p-4">
+              {elements.map((element) => (
+                <DesignerElementWrapper key={element.id} element={element} />
+              ))}
+            </div>
+          )}
         </div>
       </div>
       <DesignerSideBar />
     </div>
   );
 };
+
+function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
+    const [MouseOver, setMouseIsOver] = React.useState<Boolean>(false);
+    const { removeElement }= useDesignere()
+  const topHalf = useDroppable({
+    id: element.id + "-bottom",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      istopHalfDesignerElement: true,
+    }
+  })
+    const bottomHalf = useDroppable({
+      id: element.id + "-bottom",
+      data: {
+        type: element.type,
+        elementId: element.id,
+        isBottomHalfDesignerElement: true,
+      },
+    });
+  const DesignerElement = FormElements[element.type].designerComponent;
+  return (
+    <div 
+      className="relative h-[120px] flex flex-col text-foreground 
+      hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
+      onMouseEnter={() => {
+        setMouseIsOver(true)
+      }
+      }
+      onMouseLeave={() => {
+      setMouseIsOver(false)
+    }}
+    >
+      <div
+        ref={topHalf.setNodeRef}
+        className="absolute w-full h-1/2 rounded-t-md"
+      />
+      <div
+        ref={topHalf.setNodeRef}
+        className="absolute w-full bottom-0 h-1/2 rounded-b-md"
+      />
+      {!setMouseIsOver && (
+        <>
+          <div className="absolute right-0 h-full">
+            <Button variant={"outline"} className="flex justify-center
+             h-full border rounded-md rounded-1-none bg-red-500"
+              onClick={() => (
+              removeElement(element.id)
+            )}
+            >
+              <BiSolidTrash className="h-6 w-6" />
+            </Button>
+          </div>
+
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse">
+            <p className="text-muted-foreground">
+              Click for properties or drag to move
+            </p>
+
+          </div>
+  </>
+)}
+      <div className="flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none">
+        <DesignerElement elementInstance={element} />;
+      </div>
+    </div>
+  );
+}
 
 export default Designer;
