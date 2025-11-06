@@ -1,6 +1,11 @@
 import React from "react";
 import DesignerSideBar from "./DesignerSideBar";
-import { DragEndEvent, useDndMonitor, useDroppable } from "@dnd-kit/core";
+import {
+  DragEndEvent,
+  useDndMonitor,
+  useDraggable,
+  useDroppable,
+} from "@dnd-kit/core";
 import { cn } from "@/lib/utils";
 import {
   ElementsType,
@@ -47,12 +52,12 @@ const Designer = () => {
           )}
           ref={dropable.setNodeRef}
         >
-          {!dropable.over && elements.length === 0 && (
+          {!dropable.isOver && elements.length === 0 && (
             <p className="text-3xl text-muted-foreground flex flex-grow items-center font-bold">
               Drop here
             </p>
           )}
-          {dropable.over && (
+          {dropable.isOver && elements.length ===0 && (
             <div className="p-4 w-full">
               <div className="h-[120px] rounded-md bg-primary/20"></div>
             </div>
@@ -72,53 +77,64 @@ const Designer = () => {
 };
 
 function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
-    const [MouseOver, setMouseIsOver] = React.useState<Boolean>(false);
-    const { removeElement }= useDesignere()
+  const [MouseIsOver, setMouseIsOver] = React.useState<boolean>(false);
+  const { removeElement } = useDesignere();
   const topHalf = useDroppable({
-    id: element.id + "-bottom",
+    id: element.id + "-top",
     data: {
       type: element.type,
       elementId: element.id,
       istopHalfDesignerElement: true,
-    }
-  })
-    const bottomHalf = useDroppable({
-      id: element.id + "-bottom",
-      data: {
-        type: element.type,
-        elementId: element.id,
-        isBottomHalfDesignerElement: true,
-      },
-    });
+    },
+  });
+  const bottomHalf = useDroppable({
+    id: element.id + "-bottom",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isBottomHalfDesignerElement: true,
+    },
+  });
   const DesignerElement = FormElements[element.type].designerComponent;
+  const draggable = useDraggable({
+    id: element.id + "-drag-handler",
+    data: {
+      type: element.type,
+      elementId: element.id,
+      isDesignerElement: true,
+    },
+  });
+  if(draggable.isDragging) return null;
   return (
-    <div 
+    <div
+      ref={draggable.setNodeRef}
+      {...draggable.listeners}
+      {...draggable.attributes}
       className="relative h-[120px] flex flex-col text-foreground 
       hover:cursor-pointer rounded-md ring-1 ring-accent ring-inset"
       onMouseEnter={() => {
-        setMouseIsOver(true)
-      }
-      }
+        setMouseIsOver(true);
+      }}
       onMouseLeave={() => {
-      setMouseIsOver(false)
-    }}
+        setMouseIsOver(false);
+      }}
     >
       <div
         ref={topHalf.setNodeRef}
         className="absolute w-full h-1/2 rounded-t-md"
       />
       <div
-        ref={topHalf.setNodeRef}
+        ref={bottomHalf.setNodeRef}
         className="absolute w-full bottom-0 h-1/2 rounded-b-md"
       />
-      {!setMouseIsOver && (
+      {MouseIsOver && (
         <>
           <div className="absolute right-0 h-full">
-            <Button variant={"outline"} className="flex justify-center
-             h-full border rounded-md rounded-1-none bg-red-500"
-              onClick={() => (
-              removeElement(element.id)
-            )}
+            <Button
+              variant={"outline"}
+              className="flex justify-center
+             h-full border rounded-md rounded-l-none bg-red-500"
+              onClick={() => removeElement(element.id)}
             >
               <BiSolidTrash className="h-6 w-6" />
             </Button>
@@ -128,13 +144,23 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
             <p className="text-muted-foreground">
               Click for properties or drag to move
             </p>
-
           </div>
-  </>
-)}
-      <div className="flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none">
+        </>
+      )}
+      {topHalf.isOver && (
+        <div className="absolute top-0 w-full h-[7px] rounded-md bg-primary rounded-b-none" />
+      )}
+      <div
+        className={cn(
+          "flex w-full h-[120px] items-center rounded-md bg-accent/40 px-4 py-2 pointer-events-none opacity-100",
+          MouseIsOver && "opacity-30"
+        )}
+      >
         <DesignerElement elementInstance={element} />;
       </div>
+      {bottomHalf.isOver && (
+        <div className="absolute bottom-0 w-full h-[7px] rounded-md bg-primary rounded-t-none" />
+      )}
     </div>
   );
 }
