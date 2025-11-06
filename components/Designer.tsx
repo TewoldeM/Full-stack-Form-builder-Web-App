@@ -18,7 +18,7 @@ import { BiSolidTrash } from "react-icons/bi";
 import { Button } from "./ui/button";
 
 const Designer = () => {
-  const { elements, addElement } = useDesignere() || {};
+  const { elements, addElement,selectedElement,setSelectedElement } = useDesignere() || {};
   const dropable = useDroppable({
     id: "designer-drop-area",
     data: {
@@ -44,7 +44,7 @@ const Designer = () => {
 
   return (
     <div className="flex w-full h-full">
-      <div className="p-4 w-full">
+      <div className="p-4 w-full" onClick={() =>{ if (selectedElement) setSelectedElement(null);}}>
         <div
           className={cn(
             "bg-background max-w-[920px] h-full m-auto rounded-xl flex flex-col flex-grow items-center justify-start flex-1 overflow-y-auto",
@@ -78,7 +78,7 @@ const Designer = () => {
 
 function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
   const [MouseIsOver, setMouseIsOver] = React.useState<boolean>(false);
-  const { removeElement } = useDesignere();
+  const { removeElement,selectedElement,setSelectedElement } = useDesignere();
   const topHalf = useDroppable({
     id: element.id + "-top",
     data: {
@@ -118,6 +118,10 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
       onMouseLeave={() => {
         setMouseIsOver(false);
       }}
+      onClick={(el) => {
+        el.stopPropagation();
+        setSelectedElement(element);
+      }}
     >
       <div
         ref={topHalf.setNodeRef}
@@ -134,7 +138,11 @@ function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
               variant={"outline"}
               className="flex justify-center
              h-full border rounded-md rounded-l-none bg-red-500"
-              onClick={() => removeElement(element.id)}
+              onClick={(el) => {
+                el.stopPropagation();
+                removeElement(element.id);
+              }
+              }
             >
               <BiSolidTrash className="h-6 w-6" />
             </Button>
