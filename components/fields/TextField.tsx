@@ -35,13 +35,54 @@ export const TextFieldFormElement: FormElement = {
     lable: "Text Field",
   },
   designerComponent: DesignerComponent,
-  formComponent: () => <div>Form Components</div>,
+  formComponent: FormComponent,
   propertiesComponent: propertiesComponent,
 };
 type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes;
 }
 type propertiesFormScehmaType= z.infer<typeof propertiesSchema>
+
+function FormComponent({
+  elementInstance,
+}: {
+  elementInstance: FormElementInstance;
+}) {
+  const element = elementInstance as CustomInstance;
+  const { label, required, placeHolder, helperText } = element.extraAttributes;
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <label>
+        {label}
+        {required && "*"}
+      </label>
+      <Input placeholder={placeHolder} />
+      {helperText && (
+        <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
+      )}
+    </div>
+  );
+}
+function DesignerComponent({
+  elementInstance,
+}: {
+  elementInstance: FormElementInstance;
+}) {
+  const element = elementInstance as CustomInstance;
+  const { label, required, placeHolder, helperText } = element.extraAttributes;
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      <label>
+        {label}
+        {required && "*"}
+      </label>
+      <Input readOnly placeholder={element.extraAttributes.placeHolder} />
+      {helperText && (
+        <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
+      )}
+    </div>
+  );
+}
 function propertiesComponent({ elementInstance, }: { elementInstance: FormElementInstance }) {
   const element = elementInstance as CustomInstance;
   const { updateElement } = useDesigner();
@@ -163,17 +204,3 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
     </Form>
   ); 
 }
-function DesignerComponent({ elementInstance, }: { elementInstance: FormElementInstance }) {
-    const element = elementInstance as CustomInstance;
-    const { label, required, placeHolder, helperText } = element.extraAttributes;
-    return (
-      <div className="flex flex-col gap-2 w-full">
-        <label>
-          {label}
-          {required && "*"}
-        </label>
-        <Input readOnly placeholder={element.extraAttributes.placeHolder} />
-        {helperText && <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>}
-      </div>
-    );
-  }
