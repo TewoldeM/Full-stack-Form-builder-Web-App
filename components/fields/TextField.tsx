@@ -3,12 +3,12 @@ import { MdTextFields } from "react-icons/md";
 import { ElementsType, FormElement, FormElementInstance } from '../FormElements';
 import { Input } from "../ui/input";
 import { Label } from '@/components/ui/label';
-import { Form, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useEffect } from "react";
 import useDesigner from "../hooks/useDesigner";
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Switch } from "../ui/switch";
 const type: ElementsType = "TextField";
 const extraAttributes = {
@@ -161,9 +161,9 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
         />
       </form>
     </Form>
-  );
-
-  function DesignerComponent({ elementInstance, }: { elementInstance: FormElementInstance }) {
+  ); 
+}
+function DesignerComponent({ elementInstance, }: { elementInstance: FormElementInstance }) {
     const element = elementInstance as CustomInstance;
     const { label, required, placeHolder, helperText } = element.extraAttributes;
     return (
@@ -177,4 +177,3 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
       </div>
     );
   }
-}
