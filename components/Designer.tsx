@@ -12,13 +12,13 @@ import {
   FormElementInstance,
   FormElements,
 } from "./FormElements";
-import useDesignere from "./hooks/useDesignere";
+import useDesigner from "./hooks/useDesigner";
 import { idGenerater } from "@/lib/idGenerater";
 import { BiSolidTrash } from "react-icons/bi";
 import { Button } from "./ui/button";
 
 const Designer = () => {
-  const { elements, addElement,selectedElement,setSelectedElement } = useDesignere() || {};
+  const { elements, addElement,selectedElement,setSelectedElement } = useDesigner() || {};
   const dropable = useDroppable({
     id: "designer-drop-area",
     data: {
@@ -78,7 +78,7 @@ const Designer = () => {
 
 function DesignerElementWrapper({ element }: { element: FormElementInstance }) {
   const [MouseIsOver, setMouseIsOver] = React.useState<boolean>(false);
-  const { removeElement,selectedElement,setSelectedElement } = useDesignere();
+  const { removeElement,selectedElement,setSelectedElement } = useDesigner();
   const topHalf = useDroppable({
     id: element.id + "-top",
     data: {

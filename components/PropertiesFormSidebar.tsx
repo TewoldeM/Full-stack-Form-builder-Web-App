@@ -1,11 +1,12 @@
 import React from 'react'
-import useDesignere from './hooks/useDesignere';
 import { FormElements } from './FormElements';
 import { MdAddCircleOutline } from 'react-icons/md';
 import { Button } from './ui/button';
+import { Separator } from './ui/separator';
+import useDesigner from './hooks/useDesigner';
 
 const PropertiesFormSidebar = () => {
-    const { selectedElement, setSelectedElement } = useDesignere();
+    const { selectedElement, setSelectedElement } = useDesigner();
     if (!selectedElement) return null;
     const PropertiesForm =FormElements[selectedElement?.type].propertiesComponent;
   return (
@@ -15,8 +16,9 @@ const PropertiesFormSidebar = () => {
           <Button>
               <MdAddCircleOutline />
           </Button>
-    </div>
-      <PropertiesForm />
+      </div>
+      <Separator className='mb-4' />
+      <PropertiesForm elementInstance={selectedElement}/>
     </div>
   );
 }

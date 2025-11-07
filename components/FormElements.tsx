@@ -9,9 +9,9 @@ export type FormElement = {
     icon: React.ComponentType<{ className?: string }>; // FIXED
     lable: string;
   };
-  designerComponent: React.FC<{ elementInstance:FormElementInstance }>;
+  designerComponent: React.FC<{ elementInstance: FormElementInstance }>;
   formComponent: React.FC;
-  propertiesComponent: React.FC;
+  propertiesComponent: React.FC<{ elementInstance: FormElementInstance }>;
 };
 
 type FormElemensType = {

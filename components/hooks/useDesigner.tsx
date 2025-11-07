@@ -3,14 +3,14 @@
 import React, { useContext } from "react";
 import { DesignereContext } from "../context/DesignerContext";
 
-const useDesignere = () => {
+const useDesigner = () => {
   const context = useContext(DesignereContext);
   if (!context) {
     throw new Error(
-      "useDesignere must be used within a DesignerContextProvider"
+      "useDesigner must be used within a DesignerContextProvider"
     );
   }
   return context;
 };
 
-export default useDesignere;
+export default useDesigner;
