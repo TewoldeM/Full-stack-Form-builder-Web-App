@@ -4,6 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import { redirect } from "next/navigation";
 import { formSchema, formSchemaType } from "@/schema/form";
+import { FormSubmissions } from '../lib/generated/prisma/index';
 
 export async function GetFormsStats() {
   const user = await currentUser();
@@ -122,4 +123,40 @@ if (!user) {
       id
     }
 })
+}
+
+export async function GetFormContentByUrl(formUrl: string) {
+  return await prisma.form.update({
+    select: {
+      content:true,
+    },
+    data: {
+      visits: {
+        increment: 1
+      }
+    },
+      where:{
+        share:formUrl
+      }
+    
+  })
+}
+
+export async function SubmitForm(formUrl: string, content: string) {
+  return await prisma.form.update({
+    data: {
+      submissions: {
+        increment: 1,
+      },
+
+      formSubmissions: {
+        create: {
+          content,
+        },
+      },
+    },
+    where: {
+      share: formUrl,
+    },
+  });
 }
