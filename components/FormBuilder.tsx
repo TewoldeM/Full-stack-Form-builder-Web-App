@@ -48,12 +48,12 @@ const FormBuilder = ({ form }: { form: Form }) => {
       </div>
     );
   }
-  const shareURL = `${window.location.origin}/submit/${form.shareURL}`;
+  const shareUrl = `${window.location.origin}/submit/${form.share}`;
 
   if (form.published) {
     return (
       <>
-        <Confetti width={window.innerWidth} height={window.innerHeight} recycle={FaBullseye} />
+        <Confetti width={window.innerWidth} height={window.innerHeight} recycle={false} numberOfPieces={1000} />
         <div className="flex flex-col items-center justify-center h-full w-full">
           <div className="max-w-md">
             <h1 className="text-center text-4xl font-bold text-primary border-b pb-2 mb-10">
@@ -64,11 +64,11 @@ const FormBuilder = ({ form }: { form: Form }) => {
               Anyone with the link can view and submit the form
             </h3>
             <div className="my-4 flex flex-col gap-2 items-center w-full border-b pb-4">
-              <Input className="w-full" readOnly value={shareURL} />
+              <Input className="w-full" readOnly value={shareUrl} />
               <Button
                 className="mt-2 w-full"
                 onClick={() => {
-                  navigator.clipboard.writeText(shareURL);
+                  navigator.clipboard.writeText(shareUrl);
                   toast({
                     title: "Link Copied",
                     description:

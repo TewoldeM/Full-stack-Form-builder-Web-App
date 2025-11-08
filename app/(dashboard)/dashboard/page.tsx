@@ -55,12 +55,12 @@ interface StatsCardProps {
   loading: boolean;
 }
 
-function StateCards(props: StatsCardProps) {
+export function StateCards(props: StatsCardProps) {
   const { data, loading } = props;
 
   return (
     <div className="w-full pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
-      <StateCard
+      <StatesCard
         title="Total visits"
         icon={<LuView className="text-blue-600" />}
         helperText="All time form visits"
@@ -68,7 +68,7 @@ function StateCards(props: StatsCardProps) {
         loading={loading}
         className="shadow-md shadow-blue-600"
       />
-      <StateCard
+      <StatesCard
         title="Total Submissions"
         icon={<FaWpforms className="text-yellow-600" />}
         helperText="All time form submissions"
@@ -76,7 +76,7 @@ function StateCards(props: StatsCardProps) {
         loading={loading}
         className="shadow-md shadow-yellow-600"
       />
-      <StateCard
+      <StatesCard
         title="Submission rate"
         icon={<HiCursorClick className="text-green-600" />}
         helperText="visits that resulted in a form submission"
@@ -84,7 +84,7 @@ function StateCards(props: StatsCardProps) {
         loading={loading}
         className="shadow-md shadow-green-600"
       />
-      <StateCard
+      <StatesCard
         title="Bounce rate"
         icon={<TbArrowBounce className="text-red-600" />}
         helperText="visits that resulted in a form submission"
@@ -96,7 +96,7 @@ function StateCards(props: StatsCardProps) {
   );
 }
 
-function StateCard({
+export function StatesCard({
   title,
   icon,
   value,

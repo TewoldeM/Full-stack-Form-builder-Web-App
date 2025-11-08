@@ -108,7 +108,7 @@ const Designer = () => {
 
 
   return (
-    <div className="flex min-h-screen min-w-screen border-2 border-red-500 px-96">
+    <div className="flex min-h-screen border-2 border-red-500 px-96">
       <div className="w-full px-20" onClick={() => {
           if (selectedElement) setSelectedElement(null);
         }}
@@ -116,7 +116,7 @@ const Designer = () => {
         <div
           className={cn(
             "bg-background max-w-full h-full m-auto rounded-xl flex flex-col flex-grow items-center justify-start flex-1 overflow-y-auto",
-            dropable.isOver && "ring-4 ring-primary ring-inset px-64"
+            dropable.isOver && "ring-4 ring-primary ring-inset px-64 border-2 border-blue-500"
           )}
           ref={dropable.setNodeRef}
         >
