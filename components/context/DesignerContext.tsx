@@ -5,9 +5,10 @@ import { FormElementInstance } from '../FormElements';
 
 type DesignerContextType = {
   elements: FormElementInstance[];
+  setElements: Dispatch<SetStateAction<FormElementInstance[]>>;
   addElement: (index: number, element: FormElementInstance) => void;
-    removeElement: (id: string) => void;
-    selectedElement: FormElementInstance | null;
+  removeElement: (id: string) => void;
+  selectedElement: FormElementInstance | null;
   setSelectedElement: Dispatch<SetStateAction<FormElementInstance | null>>;
   updateElement: (id: string, element: FormElementInstance) => void;
 };
@@ -40,7 +41,7 @@ export default function DesignerContextProvider({
     })
   }
   return (
-    <DesignereContext.Provider value={{ elements, addElement, removeElement,selectedElement,setSelectedElement,updateElement }}>
+    <DesignereContext.Provider value={{ elements, addElement, removeElement,selectedElement,setSelectedElement,updateElement,setElements }}>
       {children}
     </DesignereContext.Provider>
   );
