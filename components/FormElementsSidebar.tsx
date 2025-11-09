@@ -1,7 +1,7 @@
-import React from 'react'
-import SidebarBtnElement from './SidebarBtnElement';
-import { FormElements } from './FormElements';
-import { Separator } from './ui/separator';
+import React from "react";
+import SidebarBtnElement from "./SidebarBtnElement";
+import { FormElements } from "./FormElements";
+import { Separator } from "./ui/separator";
 
 const FormElementsSidebar = () => {
   return (
@@ -23,10 +23,11 @@ const FormElementsSidebar = () => {
           <SidebarBtnElement formElement={FormElements.TextField} />
           <SidebarBtnElement formElement={FormElements.NumberField} />
           <SidebarBtnElement formElement={FormElements.TextAreaField} />
+          <SidebarBtnElement formElement={FormElements.DateField} />
         </p>
       </div>
     </div>
   );
-}
+};
 
-export default FormElementsSidebar
+export default FormElementsSidebar;
