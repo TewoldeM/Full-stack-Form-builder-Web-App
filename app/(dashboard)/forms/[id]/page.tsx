@@ -1,13 +1,17 @@
-import { GetFormById } from "@/actions/form";
-import FormBuilder from "@/components/FormBuilder";
+import { GetFormById, GetFormWithSubmission } from "@/actions/form";
 import FormLinkShare from "@/components/FormLinkShare";
 import VisitBtn from "@/components/VisitBtn";
-import React from "react";
+import React, { ReactNode } from "react";
 import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
 import { LuView } from "react-icons/lu";
 import { TbArrowBounce } from "react-icons/tb";
 import { StatesCard } from "../../dashboard/page";
+import { error } from "console";
+import { ElementsType } from "@/components/FormElements";
+import { FormElementInstance } from "@/components/FormElements";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { formatDate, formatDistance } from "date-fns";
 async function FormDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
   const form = await GetFormById(Number(id));
@@ -79,9 +83,86 @@ const bounceRate = 100 - submissionRate;
 
 export default FormDetailPage;
 
-function SubmissionTable({ id }: { id: number }) {
+type Row ={[key:string]:string} & { submittedAt:Date}
+async function SubmissionTable({ id }: { id: number }) {
+  const form = await GetFormWithSubmission(id)
+  if (!form) {
+    throw new Error("form not found")
+  }
+  const formElements = JSON.parse(form?.content) as FormElementInstance[];
+  const columns: {
+    id: string,
+    label: string,
+    required: boolean,
+    type:ElementsType
+  }[] = []
+  formElements.forEach((element) => {
+    switch (element.type) {
+      case "TextField":
+        columns.push({
+          id: element.id,
+          label: element.extraAttributes?.label,
+          required: element.extraAttributes?.required,
+          type: element.type,
+        });
+        break;
+      default:
+        break;
+    }
+  })
+  const rows: Row[] = []
+  form.formSubmissions.forEach((submission) => {
+    const content = JSON.parse(submission.content);
+    rows.push({
+      ...content,
+      submittedAt:submission.createdAt,
+    })
+  })
   return (
-    <h1 className="text-2xl font-bold my-4">Submission</h1>
-  )
+    <>
+      <h1 className="text-2xl font-bold my-4">Submission</h1>
+      <div className="rounded-border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {columns.map((column) => (
+                <TableHead key={column.id} className="uppercase">
+                  {column.label}
+                </TableHead>
+              ))}
+              <TableHead className="text-muted-foreground text-right uppercase">
+                Submitted at
+              </TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((row, index) => (
+              <TableRow key={index}>
+                {columns.map((columns) => (
+                  <RowCell
+                    key={columns.id}
+                    type={columns.type}
+                    value={row[columns.id]}
+                  />
+                ))}
+                <TableCell className="text-muted-foreground text-right">
+                  {formatDistance(row.submittedAt, new Date(), {
+                    addSuffix: true 
+                    
+                  })}
+                  
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </>
+  );
   
+}
+
+function RowCell({ type, value }: { type: ElementsType; value: string }) {
+  let node: ReactNode = value;
+  return <TableCell>{ node}</TableCell>
 }

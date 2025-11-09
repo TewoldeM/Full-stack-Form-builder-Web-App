@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import { redirect } from "next/navigation";
 import { formSchema, formSchemaType } from "@/schema/form";
-import { FormSubmissions } from '../lib/generated/prisma/index';
+import { FormSubmissions } from "../lib/generated/prisma/index";
 
 export async function GetFormsStats() {
   const user = await currentUser();
@@ -36,12 +36,12 @@ export async function GetFormsStats() {
   return { visits, submissions, submissionRate, bounceRate };
 }
 
-export async function CreateForm(data:formSchemaType) {
-  const validation = formSchema.safeParse(data)
+export async function CreateForm(data: formSchemaType) {
+  const validation = formSchema.safeParse(data);
   if (!validation.success) {
-     throw new Error("form not valid")
+    throw new Error("form not valid");
   }
-  
+
   const user = await currentUser();
   if (!user) {
     redirect("/sign-in");
@@ -52,94 +52,90 @@ export async function CreateForm(data:formSchemaType) {
       userId: user.id,
       name,
       description,
-    }
-  })
-  
-  if(!form){
-    throw new Error("something went wrong")
+    },
+  });
+
+  if (!form) {
+    throw new Error("something went wrong");
   }
 
   return form;
 }
 
 export async function GetForms() {
-
-    const user = await currentUser();
-    if (!user) {
-      redirect("/sign-in");
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
   }
-   return await prisma.form.findMany({
+  return await prisma.form.findMany({
     where: {
       userId: user.id,
-     },
-     orderBy: {
-       createdAt:"desc"
-     }
-  })
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 }
 
-
-export async function GetFormById(id:number) {
-
-
-    const user = await currentUser();
-    if (!user) {
-      redirect("/sign-in");
+export async function GetFormById(id: number) {
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
   }
-  
+
   return await prisma.form.findUnique({
     where: {
-      userId:user.id,
+      userId: user.id,
       id,
     },
-  })
+  });
 }
 export async function UpdateFormContent(id: number, jsonContent: string) {
-    const user = await currentUser();
-    if (!user) {
-      redirect("/sign-in");
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
   }
   return await prisma.form.update({
     where: {
-   userId:user.id,
+      userId: user.id,
       id,
     },
     data: {
-      content:jsonContent,
-  }})
+      content: jsonContent,
+    },
+  });
 }
 
 export async function PublishForm(id: number) {
-const user = await currentUser();
-if (!user) {
-  redirect("/sign-in");
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
   }
   return await prisma.form.update({
     data: {
-    published:true,
+      published: true,
     },
     where: {
       userId: user.id,
-      id
-    }
-})
+      id,
+    },
+  });
 }
 
 export async function GetFormContentByUrl(formUrl: string) {
   return await prisma.form.update({
     select: {
-      content:true,
+      content: true,
     },
     data: {
       visits: {
-        increment: 1
-      }
+        increment: 1,
+      },
     },
-      where:{
-        share:formUrl
-      }
-    
-  })
+    where: {
+      share: formUrl,
+    },
+  });
 }
 
 export async function SubmitForm(formUrl: string, content: string) {
@@ -157,6 +153,22 @@ export async function SubmitForm(formUrl: string, content: string) {
     },
     where: {
       share: formUrl,
+      published: true,
+    },
+  });
+}
+export async function GetFormWithSubmission(id: number) {
+  const user = await currentUser();
+  if (!user) {
+    redirect("/sign-in");
+  }
+  return await prisma.form.findUnique({
+    where: {
+      userId: user.id,
+      id,
+    },
+    include: {
+      formSubmissions: true,
     },
   });
 }
