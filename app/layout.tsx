@@ -1,4 +1,4 @@
-import { ClerkProvider, UserButton } from "@clerk/nextjs";
+import { ClerkProvider, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -28,27 +28,36 @@ export default function RootLayout({
         <body className={inter.className}>
           <NextTopLoader />
           <DesignerContextProvider>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
-              <Logo />
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
+                <Logo />
 
-              <div className="flex gap-4 items-center">
-                <Link href={"/dashboard"}>
-                  <Button className="flex flex-row justify-end items-center ">
-                    Dashboard
-                  </Button>
-                </Link>
-                <ThemeSwitcher />
-                <UserButton afterSignOutUrl="/sign-in" />
-              </div>
-            </nav>
-            {children}
-            <Toaster />
+                <div className="flex gap-4 items-center">
+                  <SignedIn>
+                    <Link href={"/dashboard"}>
+                      <Button className="flex flex-row justify-end items-center ">
+                        Dashboard
+                      </Button>
+                    </Link>
+                  </SignedIn>
+                  <SignedOut>
+                    <Link href={"/sign-up"}>
+                      <Button className="flex flex-row justify-end items-center ">
+                        Sign Up
+                      </Button>
+                    </Link>
+                  </SignedOut>
+                  <ThemeSwitcher />
+                  <UserButton afterSignOutUrl="/sign-in" />
+                </div>
+              </nav>
+              {children}
+              <Toaster />
             </ThemeProvider>
           </DesignerContextProvider>
         </body>

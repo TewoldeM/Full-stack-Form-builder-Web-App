@@ -24,7 +24,7 @@ import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import Confetti from "react-confetti";
 import { FaBullseye } from "react-icons/fa";
 const FormBuilder = ({ form }: { form: Form }) => {
-  const { setElements } = useDesigner();
+  const { setElements, setSelectedElement } = useDesigner();
   const [isReady, setIsReady] = React.useState(false);
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: { distance: 10 },
@@ -38,9 +38,10 @@ const FormBuilder = ({ form }: { form: Form }) => {
     if (isReady) return;
     const elements = JSON.parse(form.content);
     setElements(elements);
+    setSelectedElement(null);
     const readyTimeout = setTimeout(() => setIsReady(true), 500);
     return () => clearTimeout(readyTimeout);
-  }, [form, setElements]);
+  }, [form, setElements,setSelectedElement]);
   if (!isReady) {
     return (
       <div className="flex items-center justify-center w-full h-full">

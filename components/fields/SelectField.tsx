@@ -1,6 +1,7 @@
 "use client";
 import { RxDropdownMenu } from "react-icons/rx";
-import { AiOutlinePlus, AiOutlinClose } from "react-icons/ai";
+import { AiOutlinePlus } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import {
   ElementsType,
   FormElement,
@@ -28,8 +29,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
 import { SelectValue } from "@radix-ui/react-select";
 import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import { Value } from '../../lib/generated/prisma/runtime/library';
-import { type } from '../../lib/generated/prisma/index';
 import { toast } from "../ui/use-toast";
 
 const type: ElementsType = "SelectField";
@@ -300,7 +299,7 @@ function propertiesComponent({
                         field.onChange(newOptions);
                       }}
                     >
-                      <AiOutlinClose />
+                      <AiOutlineClose />
                     </Button>
                   </div>
                 ))}

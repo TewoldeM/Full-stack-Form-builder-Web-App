@@ -1,6 +1,6 @@
 import React from "react";
 import SidebarBtnElement from "./SidebarBtnElement";
-import { FormElements } from "./FormElements";
+import { FormElements, FormElement } from './FormElements';
 import { Separator } from "./ui/separator";
 
 const FormElementsSidebar = () => {
@@ -24,6 +24,8 @@ const FormElementsSidebar = () => {
           <SidebarBtnElement formElement={FormElements.NumberField} />
           <SidebarBtnElement formElement={FormElements.TextAreaField} />
           <SidebarBtnElement formElement={FormElements.DateField} />
+          <SidebarBtnElement formElement={FormElements.SelectField} />
+          <SidebarBtnElement formElement={FormElements.CheckBoxField} />
         </p>
       </div>
     </div>

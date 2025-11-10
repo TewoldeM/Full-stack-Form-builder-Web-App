@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { MdOutlinePublish } from "react-icons/md";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "./ui/alert-dialog";
 import { AlertDescription } from "./ui/alert";
-import { FaIcons } from "react-icons/fa";
+import { FaIcons, FaSpinner } from "react-icons/fa";
 import { toast } from "./ui/use-toast";
 import { PublishForm } from "@/actions/form";
 import { useRouter } from "next/navigation";
@@ -26,7 +26,7 @@ const PublishFormbtn = ({ id }: { id: number }) => {
     <AlertDialog>
       <AlertDialogTrigger>
         <Button
-          className="gap-2 text-white bg-gradient-to-r from-indigo-400 to-cyan-400"
+          className="gap-2 dark:text-white dark:bg-gradient-to-r from-indigo-400 to-cyan-400"
           variant={"outline"}
         >
           <MdOutlinePublish className="h-4 w-4" />
@@ -55,7 +55,7 @@ const PublishFormbtn = ({ id }: { id: number }) => {
             e.preventDefault()
             startTransition(publishForm)
           }}>
-            procees {loading && <FaIcons className="animate-spin"/>}
+            procees {loading && <FaSpinner className="animate-spin"/>}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
