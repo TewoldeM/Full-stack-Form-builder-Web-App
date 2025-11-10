@@ -18,6 +18,7 @@ export type ElementsType =
   | "NumberField"
   | "TextAreaField"
   | "DateField"
+  |"SelectField"
 export type submitfunction = (key: string, value: string) => void;
 export type FormElement = {
   type: ElementsType;

@@ -1,4 +1,6 @@
 "use client";
+import { RxDropdownMenu } from "react-icons/rx";
+import { AiOutlinePlus, AiOutlinClose } from "react-icons/ai";
 import {
   ElementsType,
   FormElement,
@@ -6,8 +8,9 @@ import {
   submitfunction,
 } from "../FormElements";
 import { Input } from "../ui/input";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z, { string } from "zod";
+import z from "zod";
 import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
 import {
@@ -21,25 +24,30 @@ import {
 } from "../ui/form";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
-import { BsFillCalculatorFill } from "react-icons/bs";
-import { CalendarRangeIcon } from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger } from "../ui/select";
+import { SelectValue } from "@radix-ui/react-select";
+import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { format, getDate } from "date-fns";
-import { useForm } from "react-hook-form";
-import { Calendar } from "../ui/calendar";
-const type: ElementsType = "DateField";
+import { Value } from '../../lib/generated/prisma/runtime/library';
+import { type } from '../../lib/generated/prisma/index';
+import { toast } from "../ui/use-toast";
+
+const type: ElementsType = "SelectField";
 const extraAttributes = {
-  lable: "Date field",
-  helpertext: "pick a date",
+  lable: "Select field",
+  helpertext: "Helper text",
   required: false,
+  placeHolder: "Value here ...",
+  options: [],
 };
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   helpertext: z.string().max(200),
   required: z.boolean().default(false),
+  placeHolder: z.string().max(50),
+  options: z.array(z.string()).default([]),
 });
-export const DateFieldFormElement: FormElement = {
+export const SelectFieldFormElement: FormElement = {
   type,
   construct: (id: string) => ({
     id,
@@ -47,8 +55,8 @@ export const DateFieldFormElement: FormElement = {
     extraAttributes,
   }),
   designerBtnElement: {
-    icon: BsFillCalculatorFill,
-    lable: "Date Field",
+    icon: RxDropdownMenu,
+    lable: "Select Field",
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
@@ -74,21 +82,18 @@ function DesignerComponent({
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
-  const { label, required, helperText } = element.extraAttributes;
+  const { label, required, placeHolder, helperText } = element.extraAttributes;
   return (
     <div className="flex flex-col gap-2 w-full border-2 border-yellow-600">
       <label>
         {label}
         {required && "*"}
       </label>
-      <Button
-        variant={"outline"}
-        className="w-full justify-start text-left font-normal"
-      >
-        <CalendarRangeIcon className="mr-2 h-4 w-4" />
-        <span>Pick a date</span>
-      </Button>
-
+      <Select>
+        <SelectTrigger className="w-full">
+          <SelectValue placeholder={placeHolder} />
+        </SelectTrigger>
+      </Select>{" "}
       {helperText && (
         <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
       )}
@@ -108,51 +113,35 @@ function FormComponent({
 }) {
   const element = elementInstance as CustomInstance;
   const [value, setValue] = useState(defaultvalue || "");
-  const [date, setDate] = useState<Date | undefined>(
-    defaultvalue ? new Date(defaultvalue) : undefined
-  );
-
   const [error, setError] = useState<boolean>(false);
   useEffect(() => {
     setError(isInvalid === true), [isInvalid];
   });
-  const { label, required, placeHolder, helperText } = element.extraAttributes;
+  const { label, required, placeHolder, helperText,options } = element.extraAttributes;
   return (
     <div className="flex flex-col gap-4 p-4 w-full border-2 border-gray-100 dark:border-gray-800">
       <label className={cn(error && "text-red-500")}>
         {label}
         {required && "*"}
       </label>
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "w-full justify-normal text-left font-normal",
-              !date && "text-muted-foreground",
-              error && "border-red-500"
-            )}
-          >
-            <CalendarRangeIcon className="mr-2 h-4 w-4" />
-            {date ? format(date, "PPP") : <span>Pick a date</span>}
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={date}
-            onSelect={(date) => {
-              setDate(date);
-              if (!submitvalue) return;
-              const value = date?.toUTCString() || "";
-              const valid = DateFieldFormElement.validate(element, value);
-              setError(!valid)
-              submitvalue(element.id, value)
-            }}
-            initialFocus
-          />
-        </PopoverContent>
-      </Popover>
+      <Select defaultValue={value} onValueChange={(value) => {
+        setValue(value)
+        if (!submitvalue) return
+        const valid = SelectFieldFormElement.validate(element, value);
+        setError(!valid)
+        submitvalue(element.id, value);
+      }}>
+        <SelectTrigger className={cn("w-full", error && "border-red-500")} >
+          <SelectValue placeholder={placeHolder} />
+        </SelectTrigger>
+        <SelectContent>
+          {options.map((option) => (
+            <SelectItem key={option} value={option}>
+              {option}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
       {helperText && (
         <p
           className={cn(
@@ -173,7 +162,7 @@ function propertiesComponent({
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
-  const { updateElement } = useDesigner();
+  const { updateElement,setSelectedElement } = useDesigner();
   const form = useForm<propertiesFormScehmaType>({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",
@@ -181,6 +170,8 @@ function propertiesComponent({
       label: element.extraAttributes.lable,
       helpertext: element.extraAttributes.helperText,
       required: element.extraAttributes.required,
+      placeHolder: element.extraAttributes.placeHolder,
+      options:element.extraAttributes.options
     },
   });
   useEffect(() => {
@@ -188,25 +179,26 @@ function propertiesComponent({
   }, [element, form]);
 
   function applyChanges(values: propertiesFormScehmaType) {
-    const { label, helpertext, required } = values;
+    const { label, helpertext, placeHolder, required,options } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
         label,
         helpertext,
+        placeHolder,
         required,
+        options
       },
+
     });
+    toast({ title: "success" ,
+      description: "Properties Saves Successfully"
+    })
+    setSelectedElement(null)
   }
   return (
     <Form {...form}>
-      <form
-        onBlur={form.handleSubmit(applyChanges)}
-        className="space-y-3"
-        onSubmit={(e) => {
-          e.preventDefault;
-        }}
-      >
+      <form onSubmit={form.handleSubmit(applyChanges)} className="space-y-3">
         <FormField
           control={form.control}
           name="label"
@@ -231,6 +223,25 @@ function propertiesComponent({
         />
         <FormField
           control={form.control}
+          name="placeHolder"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>placeHolder</FormLabel>
+              <FormControl>
+                <Input
+                  {...field}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") e.currentTarget.blur();
+                  }}
+                />
+              </FormControl>
+              <FormDescription>The placeHolder</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
           name="helpertext"
           render={({ field }) => (
             <FormItem>
@@ -248,6 +259,58 @@ function propertiesComponent({
             </FormItem>
           )}
         />
+        <Separator />
+        <FormField
+          control={form.control}
+          name="options"
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex justify-between items-center">
+                <FormLabel>Options"</FormLabel>
+                <Button
+                  variant={"outline"}
+                  className="gap-2"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    form.setValue("options", field.value.concat("New option"));
+                  }}
+                >
+                  <AiOutlinePlus />
+                  Add
+                </Button>
+              </div>
+              <div className="flex flex-col gap-2">
+                {form.watch("options").map((option, index) => (
+                  <div className="flex ic justify-between gap-1" key={index}>
+                    <Input
+                      placeholder=""
+                      value={option}
+                      onChange={(e) => {
+                        field.value[index] = e.target.value;
+                        field.onChange(field.value);
+                      }}
+                    />
+                    <Button
+                      variant={"ghost"}
+                      size={"icon"}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        const newOptions = [...field.value];
+                        newOptions.slice(index, 1);
+                        field.onChange(newOptions);
+                      }}
+                    >
+                      <AiOutlinClose />
+                    </Button>
+                  </div>
+                ))}
+              </div>
+              <FormDescription>The helpertext"</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Separator />
         <FormField
           control={form.control}
           name="required"
@@ -267,6 +330,10 @@ function propertiesComponent({
             </FormItem>
           )}
         />
+        <Separator />
+        <Button className="w-full" type="submit">
+          Save
+        </Button>
       </form>
     </Form>
   );
