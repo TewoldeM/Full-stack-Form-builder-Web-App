@@ -1,6 +1,23 @@
+"use client";
+import { useUser } from "@clerk/nextjs";
 import { FileText, Bot } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const BuildOptions = () => {
+  const { isSignedIn } = useUser();
+  const router = useRouter();
+  const [showMessage, setShowMessage] = useState(false);
+  const handleCreateForm = () => {
+    if (isSignedIn) {
+      router.push("/dashboard");
+    } else {
+      router.push("/sign-up");
+    }
+  };
+  const handleBrowseTemplates = () => {
+    setShowMessage(true);
+  };
   return (
     <section className="w-full py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -20,10 +37,11 @@ const BuildOptions = () => {
                 <FileText className="w-10 h-10 text-brand-blue" />
               </div>
             </div>
-
-            <h3 className="text-4xl font-bold text-foreground text-center mb-4">
-              GRAB A TEMPLATE
-            </h3>
+            <button>
+              <h3 className="text-4xl font-bold text-foreground text-center mb-4">
+                GRAB A TEMPLATE
+              </h3>
+            </button>
 
             <p className="text-center text-lg max-w-4xl mb-2 text-gray-600">
               Why reinvent the wheel? Pick from 100+ professionally designed
@@ -35,11 +53,19 @@ const BuildOptions = () => {
             </p>
 
             <div className="flex justify-center mt-8">
-              <button className="px-6 py-3 bg-blue-700  text-white rounded-lg hover:opacity-90 transition-opacity font-bold flex items-center gap-2">
+              <button
+                onClick={handleBrowseTemplates}
+                className="px-6 py-3 bg-blue-700  text-white rounded-lg hover:opacity-90 transition-opacity font-bold flex items-center gap-2"
+              >
                 <FileText className="w-5 h-5" />
                 BROWSE TEMPLATES
               </button>
             </div>
+            {showMessage && (
+              <p className="text-red-500 mb-6 justify-center items-center mt-2 text-center">
+                This functionality is not yet finished, please wait.
+              </p>
+            )}
           </div>
 
           <div className="bg-cardBg-green rounded-2xl p-8 border-4 border-brand-green shadow-xl">
@@ -50,26 +76,23 @@ const BuildOptions = () => {
             </div>
 
             <h3 className="text-4xl font-bold text-foreground text-center mb-4">
-              AI MAGIC TIME
+              Preview At a TIME
             </h3>
 
             <p className="text-center text-gray-700 mb-2 text-lg">
-              Just tell our AI what you need and watch it create a{" "}
+              Just build the form and view it how it look like
               <span className="bg-yellow-500 px-2 py-1 font-bold text-black">
                 PERFECT
               </span>{" "}
               form in seconds!
             </p>
 
-            <div className="mt-8 bg-white rounded-lg p-4 flex items-center gap-3">
-              <Bot className="w-8 h-8 text-brand-purple flex-shrink-0" />
-              <input
-                type="text"
-                placeholder="I need a contact form for my..."
-                className="flex-1 outline-none text-foreground"
-              />
-              <button className="px-6 py-2 bg-brand-purple text-white rounded-lg hover:bg-brand-purple/90 transition-colors font-bold">
-                Generate
+            <div className="mt-8 bg-white rounded-lg p-8 flex items-center justify-center gap-3">
+              <button
+                onClick={handleCreateForm}
+                className="text-xl px-6 py-2 bg-brand-purple text-white rounded-lg hover:bg-purple-600/90 transition-colors font-bold"
+              >
+                Get Started
               </button>
             </div>
           </div>

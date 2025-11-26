@@ -4,7 +4,7 @@ const Features = () => {
   const features = [
     {
       icon: Bot,
-      title: "AI-Powered Creation",
+      title: "AI-Powered Creation(Coming Soon)",
       description:
         "Describe your needs and watch AI build professional forms instantly.",
     },

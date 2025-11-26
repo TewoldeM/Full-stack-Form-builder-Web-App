@@ -52,7 +52,7 @@ export default function RootLayout({
                       </Button>
                     </Link>
                   </SignedOut>
-                  <ThemeSwitcher />
+          
                   <UserButton afterSignOutUrl="/sign-in" />
                 </div>
               </nav>

@@ -1,3 +1,4 @@
+" use client";
 import {
   Heart,
   Home,
@@ -7,8 +8,15 @@ import {
   GraduationCap,
   ChevronRight,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const Industries = () => {
+    const router = useRouter();
+    const [showMessage, setShowMessage] = useState(false);
+    const handleBrowseTemplates = () => {
+      setShowMessage(true);
+    };
   const industries = [
     {
       icon: Heart,
@@ -69,14 +77,14 @@ const Industries = () => {
   ];
 
   return (
-    <section className="w-full py-20 ">
+    <section className="w-full py-20 bg-orange-50">
       <div className="container mx-auto px-4">
         <h2 className="text-5xl md:text-6xl font-bold text-center mb-4">
           EVERY INDUSTRY <span className="text-brand-pink">COVERED!</span>
         </h2>
 
         <p className="text-2xl text-center text-muted-foreground mb-16">
-          From doctors to dog walkers, we've got templates that make your
+          From doctors to dog walkers, we have got templates that make your
           business look{" "}
           <span className="text-brand-purple font-bold underline">
             INCREDIBLE
@@ -98,7 +106,9 @@ const Industries = () => {
                 {industry.title}
               </h3>
 
-              <p className="text-foreground mb-4 text-lg">{industry.description}</p>
+              <p className="text-foreground mb-4 text-lg">
+                {industry.description}
+              </p>
 
               <ul className="space-y-3 mb-6">
                 {industry.features.map((feature, idx) => (
@@ -109,21 +119,35 @@ const Industries = () => {
                 ))}
               </ul>
 
-              <button className="flex items-center gap-2 text-brand-blue font-bold hover:gap-3 transition-all">
+              <button onClick={handleBrowseTemplates} className="flex items-center gap-2 text-brand-blue font-bold hover:gap-3 transition-all">
                 LEARN MORE <ChevronRight className="w-5 h-5" />
               </button>
+              {showMessage && (
+                <p className="text-red-500 mb-6 justify-center items-center mt-2 text-center">
+                  This functionality is not yet finished, please wait.
+                </p>
+              )}
             </div>
           ))}
         </div>
 
         <div className="text-center">
           <p className="text-muted-foreground mb-4">
-            Don't see your industry? We've got solutions for 25+ categories!
+            Don&apos;t see your industry? We have got solutions for 25+
+            categories!
           </p>
-          <button className="px-8 py-4 bg-pink-500 text-white rounded-lg hover:bg-brand-pink/90 transition-colors font-bold text-lg">
+          <button
+            onClick={handleBrowseTemplates}
+            className="px-8 py-4 bg-pink-500 text-white rounded-lg hover:bg-brand-pink/90 transition-colors font-bold text-lg"
+          >
             📋 EXPLORE ALL TEMPLATES
           </button>
         </div>
+        {showMessage && (
+          <p className="text-red-500 mb-6 justify-center items-center mt-2 text-center">
+            This functionality is not yet finished, please wait.
+          </p>
+        )}
       </div>
     </section>
   );
