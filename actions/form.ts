@@ -1,11 +1,8 @@
 "use server";
-
 import { currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/client";
 import { redirect } from "next/navigation";
 import { formSchema, formSchemaType } from "@/schema/form";
-import { FormSubmissions } from "../lib/generated/prisma/index";
-
 export async function GetFormsStats() {
   const user = await currentUser();
 
