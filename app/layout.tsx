@@ -28,37 +28,30 @@ export default function RootLayout({
         <body className={inter.className}>
           <NextTopLoader />
           <DesignerContextProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
-              <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
-                <Logo />
+            <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
+              <Logo />
 
-                <div className="flex gap-4 items-center">
-                  <SignedIn>
-                    <Link href={"/dashboard"}>
-                      <Button className="flex flex-row justify-end items-center ">
-                        Dashboard
-                      </Button>
-                    </Link>
-                  </SignedIn>
-                  <SignedOut>
-                    <Link href={"/sign-up"}>
-                      <Button className="flex flex-row justify-end items-center ">
-                        Sign Up
-                      </Button>
-                    </Link>
-                  </SignedOut>
-          
-                  <UserButton afterSignOutUrl="/sign-in" />
-                </div>
-              </nav>
-              {children}
-              <Toaster />
-            </ThemeProvider>
+              <div className="flex gap-4 items-center">
+                <SignedIn>
+                  <Link href={"/dashboard"}>
+                    <Button className="flex flex-row justify-end items-center ">
+                      Dashboard
+                    </Button>
+                  </Link>
+                </SignedIn>
+                <SignedOut>
+                  <Link href={"/sign-up"}>
+                    <Button className="flex flex-row justify-end items-center ">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </SignedOut>
+
+                <UserButton afterSignOutUrl="/sign-in" />
+              </div>
+            </nav>
+            {children}
+            <Toaster />
           </DesignerContextProvider>
         </body>
       </html>
