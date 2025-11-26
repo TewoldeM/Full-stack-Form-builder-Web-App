@@ -45,7 +45,7 @@ export const SubTitleFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: () => true,
 };
 type CustomInstance = FormElementInstance & {
@@ -54,14 +54,13 @@ type CustomInstance = FormElementInstance & {
 type propertiesFormScehmaType = z.infer<typeof propertiesSchema>;
 
 function FormComponent({
-  elementInstance,}: {
+  elementInstance,
+}: {
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
   const { title } = element.extraAttributes;
-  return (
-      <p className="text-lg">{title}</p>
-  );
+  return <p className="text-lg">{title}</p>;
 }
 function DesignerComponent({
   elementInstance,
@@ -69,7 +68,7 @@ function DesignerComponent({
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
-  const { title} = element.extraAttributes;
+  const { title } = element.extraAttributes;
   return (
     <div className="flex flex-col gap-2 w-full border-2 border-yellow-600">
       <label className="text-muted-foreground">
@@ -79,7 +78,7 @@ function DesignerComponent({
     </div>
   );
 }
-function propertiesComponent({
+function PropertiesComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
@@ -90,7 +89,7 @@ function propertiesComponent({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",
     defaultValues: {
-      title:element.extraAttributes.title,
+      title: element.extraAttributes.title,
     },
   });
   useEffect(() => {
@@ -98,7 +97,7 @@ function propertiesComponent({
   }, [element, form]);
 
   function applyChanges(values: propertiesFormScehmaType) {
-    const { title} = values;
+    const { title } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -133,7 +132,6 @@ function propertiesComponent({
             </FormItem>
           )}
         />
-  
       </form>
     </Form>
   );

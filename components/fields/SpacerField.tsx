@@ -46,7 +46,7 @@ export const SpacerFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: () => true,
 };
 type CustomInstance = FormElementInstance & {
@@ -77,7 +77,7 @@ function DesignerComponent({
     </div>
   );
 }
-function propertiesComponent({
+function PropertiesComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
@@ -118,14 +118,15 @@ function propertiesComponent({
           name="height"
           render={({ field }) => (
             <FormItem>
-              <FormLabel >Height(px):{form.watch(("height")) }</FormLabel>
+              <FormLabel>Height(px):{form.watch("height")}</FormLabel>
               <FormControl className="pt-2">
-                <Slider defaultValue={[field.value]}
+                <Slider
+                  defaultValue={[field.value]}
                   min={5}
                   max={200}
                   step={1}
                   onValueChange={(value) => {
-                    field.onChange(value[0])
+                    field.onChange(value[0]);
                   }}
                 />
               </FormControl>

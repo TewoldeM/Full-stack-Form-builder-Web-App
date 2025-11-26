@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -19,6 +19,7 @@ const config = {
     },
     extend: {
       colors: {
+        /* shadcn default colors */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -52,12 +53,30 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+
+        /* ⭐ YOUR CUSTOM COLOR VARIABLES ⭐ */
+        teal: "hsl(var(--teal))",
+        violet: "hsl(var(--violet))",
+
+        "brand-blue": "hsl(var(--brand-blue))",
+        "brand-purple": "hsl(var(--brand-purple))",
+        "brand-green": "hsl(var(--brand-green))",
+        "brand-yellow": "hsl(var(--brand-yellow))",
+
+        "card-dark": "hsl(var(--card-dark))",
+        "card-light": "hsl(var(--card-light))",
+
+        "navy-dark": "hsl(var(--navy-dark))",
+        "navy-medium": "hsl(var(--navy-medium))",
+        "navy-light": "hsl(var(--navy-light))",
       },
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
@@ -68,11 +87,13 @@ const config = {
           to: { height: "0" },
         },
       },
+
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+
     backgroundImage: {
       "form-gradient":
         "linear-gradient(135deg, hsl(217 91% 60%), hsl(142 76% 36%))",
@@ -81,4 +102,4 @@ const config = {
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
 
-export default config
+export default config;

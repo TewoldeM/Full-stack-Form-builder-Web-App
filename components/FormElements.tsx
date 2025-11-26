@@ -38,7 +38,7 @@ export type FormElement = {
     defaultvalue: string;
   }>;
 
-  propertiesComponent: React.FC<{
+  PropertiesComponent: React.FC<{
     elementInstance: FormElementInstance;
   }>;
   validate: (formElement: FormElementInstance, currentvalue: string) => boolean;
@@ -65,5 +65,5 @@ export const FormElements: FormElemensType = {
   TextAreaField: TextAreaFieldFormElement,
   DateField: DateFieldFormElement,
   SelectField: SelectFieldFormElement,
-  CheckBoxField:CheckBoxFieldFormElement
+  CheckBoxField: CheckBoxFieldFormElement,
 };

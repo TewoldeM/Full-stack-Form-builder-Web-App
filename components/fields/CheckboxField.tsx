@@ -1,5 +1,4 @@
 "use client";
-import { MdTextFields } from "react-icons/md";
 import {
   ElementsType,
   FormElement,
@@ -7,7 +6,6 @@ import {
   submitfunction,
 } from "../FormElements";
 import { Input } from "../ui/input";
-import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
@@ -26,17 +24,21 @@ import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
 import { IoMdCheckbox } from "react-icons/io";
 import { Checkbox } from "../ui/checkbox";
+
 const type: ElementsType = "CheckBoxField";
+
 const extraAttributes = {
   lable: "CheckBox field",
   helpertext: "Helper text",
   required: false,
 };
+
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   helpertext: z.string().max(200),
   required: z.boolean().default(false),
 });
+
 export const CheckBoxFieldFormElement: FormElement = {
   type,
   construct: (id: string) => ({
@@ -50,7 +52,7 @@ export const CheckBoxFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: (
     formElement: FormElementInstance,
     currentvalue: string
@@ -62,10 +64,13 @@ export const CheckBoxFieldFormElement: FormElement = {
     return true;
   },
 };
+
 type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes;
 };
+
 type propertiesFormScehmaType = z.infer<typeof propertiesSchema>;
+
 function DesignerComponent({
   elementInstance,
 }: {
@@ -74,6 +79,7 @@ function DesignerComponent({
   const element = elementInstance as CustomInstance;
   const { label, required, helperText } = element.extraAttributes;
   const id = `checkbox-${element.id}`;
+
   return (
     <div className="flex items-top space-x-2">
       <Checkbox id={id} />
@@ -83,13 +89,13 @@ function DesignerComponent({
           {required && "*"}
         </label>
       </div>
-
       {helperText && (
         <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
       )}
     </div>
   );
 }
+
 function FormComponent({
   elementInstance,
   submitvalue,
@@ -102,15 +108,19 @@ function FormComponent({
   defaultvalue?: string;
 }) {
   const element = elementInstance as CustomInstance;
+
   const [value, setValue] = useState<boolean>(
     defaultvalue === "true" ? true : false
   );
   const [error, setError] = useState<boolean>(false);
+
   useEffect(() => {
     setError(isInvalid === true), [isInvalid];
-  });
+  }, [isInvalid]);
+
   const { label, required, placeHolder, helperText } = element.extraAttributes;
   const id = `checkbox-${element.id}`;
+
   return (
     <div className="flex items-top space-x-2">
       <Checkbox
@@ -120,14 +130,19 @@ function FormComponent({
         onCheckedChange={(checked) => {
           let value = false;
           if (checked === true) value = true;
+
           const stringValue = value ? "true" : "false";
           setValue(value);
+
           if (!submitvalue) return;
+
           const valid = CheckBoxFieldFormElement.validate(element, stringValue);
           setError(!valid);
+
           submitvalue(element.id, stringValue);
         }}
       />
+
       <div className="grid gap-1.5 leading-none">
         <label htmlFor={id} className={cn(error && "text-red-500")}>
           {label}
@@ -136,34 +151,44 @@ function FormComponent({
       </div>
 
       {helperText && (
-        <p className={cn("text-muted-foreground text-[0.8rem]",error && "text-red-500")}>{helperText}</p>
+        <p
+          className={cn(
+            "text-muted-foreground text-[0.8rem]",
+            error && "text-red-500"
+          )}
+        >
+          {helperText}
+        </p>
       )}
     </div>
   );
 }
 
-function propertiesComponent({
+function PropertiesComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
   const { updateElement } = useDesigner();
+
   const form = useForm<propertiesFormScehmaType>({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",
     defaultValues: {
       label: element.extraAttributes.lable,
-      helpertext: element.extraAttributes.helperText,
+      helpertext: element.extraAttributes.helpertext,
       required: element.extraAttributes.required,
     },
   });
+
   useEffect(() => {
     form.reset(element.extraAttributes);
   }, [element, form]);
 
   function applyChanges(values: propertiesFormScehmaType) {
     const { label, helpertext, required } = values;
+
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -173,15 +198,17 @@ function propertiesComponent({
       },
     });
   }
+
   return (
     <Form {...form}>
       <form
         onBlur={form.handleSubmit(applyChanges)}
         className="space-y-3"
         onSubmit={(e) => {
-          e.preventDefault;
+          e.preventDefault();
         }}
       >
+        {/* LABEL */}
         <FormField
           control={form.control}
           name="label"
@@ -197,20 +224,21 @@ function propertiesComponent({
                 />
               </FormControl>
               <FormDescription>
-                The lable of the field. <br /> It will be displayed above the
-                fields
+                The label of the field. <br /> It will be displayed above the
+                fields.
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
 
+        {/* HELPER TEXT */}
         <FormField
           control={form.control}
           name="helpertext"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>helpertext"</FormLabel>
+              <FormLabel>Helper Text&nbsp;&quot;</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -219,19 +247,21 @@ function propertiesComponent({
                   }}
                 />
               </FormControl>
-              <FormDescription>The helpertext"</FormDescription>
+              <FormDescription>The helper text&nbsp;&quot;</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/* REQUIRED SWITCH */}
         <FormField
           control={form.control}
           name="required"
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>required"</FormLabel>
-                <FormDescription>The helpertext"</FormDescription>
+                <FormLabel>Required&nbsp;&quot;</FormLabel>
+                <FormDescription>The helper text&nbsp;&quot;</FormDescription>
               </div>
               <FormControl>
                 <Switch

@@ -1,6 +1,4 @@
 import React from "react";
-import { FormElements } from "./FormElements";
-import SidebarBtnElement from "./SidebarBtnElement";
 import useDesignere from "./hooks/useDesigner";
 import FormElementsSidebar from "./FormElementsSidebar";
 import PropertiesFormSidebar from "./PropertiesFormSidebar";

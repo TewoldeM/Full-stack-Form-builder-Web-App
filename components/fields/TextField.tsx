@@ -1,14 +1,27 @@
-"use client"
+"use client";
 import { MdTextFields } from "react-icons/md";
-import { ElementsType, FormElement, FormElementInstance, submitfunction } from '../FormElements';
+import {
+  ElementsType,
+  FormElement,
+  FormElementInstance,
+  submitfunction,
+} from "../FormElements";
 import { Input } from "../ui/input";
-import { Label } from '@/components/ui/label';
+import { Label } from "@/components/ui/label";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
 const type: ElementsType = "TextField";
@@ -37,26 +50,28 @@ export const TextFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
-  validate: (formElement:FormElementInstance,currentvalue: string): boolean => {
+  PropertiesComponent: PropertiesComponent,
+  validate: (
+    formElement: FormElementInstance,
+    currentvalue: string
+  ): boolean => {
     const element = formElement as CustomInstance;
     if (element.extraAttributes.required) {
       return currentvalue.length > 0;
     }
-    return true
+    return true;
   },
 };
 type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes;
-}
-type propertiesFormScehmaType= z.infer<typeof propertiesSchema>
+};
+type propertiesFormScehmaType = z.infer<typeof propertiesSchema>;
 
 function FormComponent({
   elementInstance,
   submitvalue,
   isInvalid,
   defaultvalue,
-  
 }: {
   elementInstance: FormElementInstance;
   submitvalue?: submitfunction;
@@ -64,11 +79,11 @@ function FormComponent({
   defaultvalue?: string;
 }) {
   const element = elementInstance as CustomInstance;
-  const [value, setValue] = useState( defaultvalue || "");
+  const [value, setValue] = useState(defaultvalue || "");
   const [error, setError] = useState<boolean>(false);
   useEffect(() => {
     setError(isInvalid === true), [isInvalid];
-  });
+  }, [isInvalid]);
   const { label, required, placeHolder, helperText } = element.extraAttributes;
   return (
     <div className="flex flex-col gap-4 p-4 w-full border-2 border-gray-100 dark:border-gray-800">
@@ -109,7 +124,6 @@ function FormComponent({
 }
 function DesignerComponent({
   elementInstance,
-
 }: {
   elementInstance: FormElementInstance;
 }) {
@@ -128,7 +142,11 @@ function DesignerComponent({
     </div>
   );
 }
-function propertiesComponent({ elementInstance, }: { elementInstance: FormElementInstance }) {
+function PropertiesComponent({
+  elementInstance,
+}: {
+  elementInstance: FormElementInstance;
+}) {
   const element = elementInstance as CustomInstance;
   const { updateElement } = useDesigner();
   const form = useForm<propertiesFormScehmaType>({
@@ -142,9 +160,9 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
     },
   });
   useEffect(() => {
-    form.reset(element.extraAttributes)
-  }, [element, form])
-  
+    form.reset(element.extraAttributes);
+  }, [element, form]);
+
   function applyChanges(values: propertiesFormScehmaType) {
     const { label, helpertext, placeHolder, required } = values;
     updateElement(element.id, {
@@ -212,7 +230,7 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
           name="helpertext"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>helpertext"</FormLabel>
+              <FormLabel>helpertext</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -221,7 +239,7 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
                   }}
                 />
               </FormControl>
-              <FormDescription>The helpertext"</FormDescription>
+              <FormDescription>The helpertext</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -232,8 +250,8 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>required"</FormLabel>
-                <FormDescription>The helpertext"</FormDescription>
+                <FormLabel>required</FormLabel>
+                <FormDescription>The helpertext</FormDescription>
               </div>
               <FormControl>
                 <Switch
@@ -247,5 +265,5 @@ function propertiesComponent({ elementInstance, }: { elementInstance: FormElemen
         />
       </form>
     </Form>
-  ); 
+  );
 }

@@ -108,10 +108,9 @@ const Designer = () => {
 
 
   return (
-    <div className="flex min-h-screen border-2 border-red-500 px-96">
+    <div className="flex w-full h-full">
       <div className="w-full px-20" onClick={() => {
-          if (selectedElement) setSelectedElement(null);
-        }}
+          if (selectedElement) setSelectedElement(null);}}
       >
         <div
           className={cn(

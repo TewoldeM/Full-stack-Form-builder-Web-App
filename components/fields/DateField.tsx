@@ -7,7 +7,7 @@ import {
 } from "../FormElements";
 import { Input } from "../ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import z, { string } from "zod";
+import z from "zod";
 import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
 import {
@@ -25,20 +25,24 @@ import { BsFillCalculatorFill } from "react-icons/bs";
 import { CalendarRangeIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { format, getDate } from "date-fns";
+import { format } from "date-fns";
 import { useForm } from "react-hook-form";
 import { Calendar } from "../ui/calendar";
+
 const type: ElementsType = "DateField";
+
 const extraAttributes = {
   lable: "Date field",
   helpertext: "pick a date",
   required: false,
 };
+
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   helpertext: z.string().max(200),
   required: z.boolean().default(false),
 });
+
 export const DateFieldFormElement: FormElement = {
   type,
   construct: (id: string) => ({
@@ -52,7 +56,7 @@ export const DateFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: (
     formElement: FormElementInstance,
     currentvalue: string
@@ -64,10 +68,15 @@ export const DateFieldFormElement: FormElement = {
     return true;
   },
 };
+
 type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes;
 };
+
 type propertiesFormScehmaType = z.infer<typeof propertiesSchema>;
+
+/* ---------------------- Designer Component ---------------------- */
+
 function DesignerComponent({
   elementInstance,
 }: {
@@ -75,12 +84,14 @@ function DesignerComponent({
 }) {
   const element = elementInstance as CustomInstance;
   const { label, required, helperText } = element.extraAttributes;
+
   return (
     <div className="flex flex-col gap-2 w-full border-2 border-yellow-600">
       <label>
         {label}
         {required && "*"}
       </label>
+
       <Button
         variant={"outline"}
         className="w-full justify-start text-left font-normal"
@@ -95,6 +106,9 @@ function DesignerComponent({
     </div>
   );
 }
+
+/* ---------------------- Form Component ---------------------- */
+
 function FormComponent({
   elementInstance,
   submitvalue,
@@ -113,16 +127,21 @@ function FormComponent({
   );
 
   const [error, setError] = useState<boolean>(false);
+
+  // ✅ FIXED useEffect dependency
   useEffect(() => {
-    setError(isInvalid === true), [isInvalid];
-  });
-  const { label, required, placeHolder, helperText } = element.extraAttributes;
+    setError(isInvalid === true);
+  }, [isInvalid]);
+
+  const { label, required, helperText } = element.extraAttributes;
+
   return (
     <div className="flex flex-col gap-4 p-4 w-full border-2 border-gray-100 dark:border-gray-800">
       <label className={cn(error && "text-red-500")}>
         {label}
         {required && "*"}
       </label>
+
       <Popover>
         <PopoverTrigger asChild>
           <Button
@@ -137,6 +156,7 @@ function FormComponent({
             {date ? format(date, "PPP") : <span>Pick a date</span>}
           </Button>
         </PopoverTrigger>
+
         <PopoverContent className="w-auto p-0" align="start">
           <Calendar
             mode="single"
@@ -144,15 +164,18 @@ function FormComponent({
             onSelect={(date) => {
               setDate(date);
               if (!submitvalue) return;
+
               const value = date?.toUTCString() || "";
               const valid = DateFieldFormElement.validate(element, value);
-              setError(!valid)
-              submitvalue(element.id, value)
+
+              setError(!valid);
+              submitvalue(element.id, value);
             }}
             initialFocus
           />
         </PopoverContent>
       </Popover>
+
       {helperText && (
         <p
           className={cn(
@@ -167,28 +190,33 @@ function FormComponent({
   );
 }
 
-function propertiesComponent({
+/* ---------------------- Properties Component ---------------------- */
+
+function PropertiesComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
   const { updateElement } = useDesigner();
+
   const form = useForm<propertiesFormScehmaType>({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",
     defaultValues: {
       label: element.extraAttributes.lable,
-      helpertext: element.extraAttributes.helperText,
+      helpertext: element.extraAttributes.helpertext,
       required: element.extraAttributes.required,
     },
   });
+
   useEffect(() => {
     form.reset(element.extraAttributes);
   }, [element, form]);
 
   function applyChanges(values: propertiesFormScehmaType) {
     const { label, helpertext, required } = values;
+
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -198,15 +226,15 @@ function propertiesComponent({
       },
     });
   }
+
   return (
     <Form {...form}>
       <form
         onBlur={form.handleSubmit(applyChanges)}
         className="space-y-3"
-        onSubmit={(e) => {
-          e.preventDefault;
-        }}
+        onSubmit={(e) => e.preventDefault()}
       >
+        {/* Label */}
         <FormField
           control={form.control}
           name="label"
@@ -229,12 +257,14 @@ function propertiesComponent({
             </FormItem>
           )}
         />
+
+        {/* Helpertext */}
         <FormField
           control={form.control}
           name="helpertext"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>helpertext"</FormLabel>
+              <FormLabel>helpertext &quot;</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -243,19 +273,21 @@ function propertiesComponent({
                   }}
                 />
               </FormControl>
-              <FormDescription>The helpertext"</FormDescription>
+              <FormDescription>The helpertext &quot;</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/* Required */}
         <FormField
           control={form.control}
           name="required"
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>required"</FormLabel>
-                <FormDescription>The helpertext"</FormDescription>
+                <FormLabel>required &quot;</FormLabel>
+                <FormDescription>The helpertext &quot;</FormDescription>
               </div>
               <FormControl>
                 <Switch

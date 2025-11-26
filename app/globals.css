@@ -2,13 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* -------------------------------------------------------
+   GLOBAL DESIGN SYSTEM + FORM BUILDER THEME (MERGED)
+   All colors MUST be HSL.
+-------------------------------------------------------- */
 
 @layer base {
   :root {
-    /* Light Theme */
+    /* Light Theme (Default) */
     --background: 0 0% 100%;
     --foreground: 224 71.4% 4.1%;
     --card: 0 0% 100%;
@@ -30,57 +31,27 @@ All colors MUST be HSL.
     --ring: 224 71.4% 4.1%;
     --radius: 0.5rem;
 
-    /* Form Builder Specific (from first file) */
-    --canvas: 0 0% 2%;
-    --canvas-foreground: 0 0% 96%;
-    --component-hover: 217 91% 60%;
-    --component-selected: 142 76% 36%;
-    --sidebar-bg: 0 0% 3%;
-    --toolbar: 0 0% 5%;
-    --sidebar-background: 0 0% 3%;
-    --sidebar-foreground: 0 0% 90%;
-    --sidebar-primary: 217 91% 60%;
-    --sidebar-primary-foreground: 0 0% 0%;
-    --sidebar-accent: 0 0% 8%;
-    --sidebar-accent-foreground: 0 0% 90%;
-    --sidebar-border: 0 0% 12%;
-    --sidebar-ring: 217 91% 60%;
+    /* --- EXTRA COLORS FROM YOUR FIRST FILE (SAFE TO MERGE) --- */
+    --brand-blue: 217 91% 60%;
+    --brand-blue-light: 214 95% 93%;
+    --brand-purple: 271 91% 65%;
+    --brand-green: 142 76% 36%;
+    --brand-green-light: 142 76% 94%;
+    --brand-pink: 330 81% 60%;
+    --brand-yellow: 43 96% 56%;
+    --brand-orange: 25 95% 53%;
 
-    /* Gradients (from first file) */
-    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(142 76% 36%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 4%), hsl(0 0% 6%));
-    --gradient-glow: radial-gradient(circle, hsl(217 91% 60% / 0.1), transparent);
+    --card-blue: 214 100% 97%;
+    --card-green: 152 100% 96%;
+    --card-purple: 271 100% 96%;
+    --card-gray: 220 14% 96%;
+    --card-yellow: 48 100% 96%;
+    --card-orange: 28 100% 95%;
 
-    /* Shadows (from first file) */
-    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.2);
-    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
-    --shadow-component: 0 4px 16px hsl(0 0% 0% / 0.3);
-  }
+    --navy: 220 39% 11%;
+    --navy-light: 217 20% 20%;
 
-  .dark {
-    /* Dark Form Builder Theme */
-    --background: 0 0% 0%;
-    --foreground: 0 0% 100%;
-    --card: 0 0% 4%;
-    --card-foreground: 0 0% 96%;
-    --popover: 0 0% 6%;
-    --popover-foreground: 0 0% 96%;
-    --primary: 217 91% 60%;
-    --primary-foreground: 0 0% 0%;
-    --secondary: 0 0% 8%;
-    --secondary-foreground: 0 0% 90%;
-    --muted: 0 0% 6%;
-    --muted-foreground: 0 0% 60%;
-    --accent: 142 76% 36%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 0 0% 12%;
-    --input: 0 0% 8%;
-    --ring: 217 91% 60%;
-    --radius: 0.5rem;
-
-    /* Form Builder Specific */
+    /* --- FORM BUILDER SPECIFIC THEME --- */
     --canvas: 0 0% 2%;
     --canvas-foreground: 0 0% 96%;
     --component-hover: 217 91% 60%;
@@ -107,6 +78,56 @@ All colors MUST be HSL.
     --shadow-component: 0 4px 16px hsl(0 0% 0% / 0.3);
   }
 
+  /* -------------------------------------------------------
+     DARK MODE THEME
+  -------------------------------------------------------- */
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 4%;
+    --card-foreground: 0 0% 96%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 0 0% 96%;
+    --primary: 217 91% 60%;
+    --primary-foreground: 0 0% 0%;
+    --secondary: 0 0% 8%;
+    --secondary-foreground: 0 0% 90%;
+    --muted: 0 0% 6%;
+    --muted-foreground: 0 0% 60%;
+    --accent: 142 76% 36%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 12%;
+    --input: 0 0% 8%;
+    --ring: 217 91% 60%;
+    --radius: 0.5rem;
+
+    --canvas: 0 0% 2%;
+    --canvas-foreground: 0 0% 96%;
+    --component-hover: 217 91% 60%;
+    --component-selected: 142 76% 36%;
+    --sidebar-bg: 0 0% 3%;
+    --toolbar: 0 0% 5%;
+    --sidebar-background: 0 0% 3%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 217 91% 60%;
+    --sidebar-primary-foreground: 0 0% 0%;
+    --sidebar-accent: 0 0% 8%;
+    --sidebar-accent-foreground: 0 0% 90%;
+    --sidebar-border: 0 0% 12%;
+    --sidebar-ring: 217 91% 60%;
+
+    --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(142 76% 36%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 4%), hsl(0 0% 6%));
+    --gradient-glow: radial-gradient(circle, hsl(217 91% 60% / 0.1), transparent);
+
+    --shadow-glow: 0 0 40px hsl(217 91% 60% / 0.2);
+    --shadow-card: 0 8px 32px hsl(0 0% 0% / 0.4);
+    --shadow-component: 0 4px 16px hsl(0 0% 0% / 0.3);
+  }
+
+  /* Global element styles */
   * {
     @apply border-border;
   }

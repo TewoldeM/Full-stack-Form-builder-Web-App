@@ -29,7 +29,7 @@ import { BsTextParagraph } from "react-icons/bs";
 import { Textarea } from "../ui/textarea";
 const type: ElementsType = "ParagraphField";
 const extraAttributes = {
-text:"Text here"
+  text: "Text here",
 };
 const propertiesSchema = z.object({
   text: z.string().min(2).max(500),
@@ -47,7 +47,7 @@ export const ParagraphFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: () => true,
 };
 type CustomInstance = FormElementInstance & {
@@ -56,14 +56,13 @@ type CustomInstance = FormElementInstance & {
 type propertiesFormScehmaType = z.infer<typeof propertiesSchema>;
 
 function FormComponent({
-  elementInstance,}: {
+  elementInstance,
+}: {
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
   const { text } = element.extraAttributes;
-  return (
-      <p className="">{text}</p>
-  );
+  return <p className="">{text}</p>;
 }
 function DesignerComponent({
   elementInstance,
@@ -71,17 +70,17 @@ function DesignerComponent({
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
-  const { text} = element.extraAttributes;
+  const { text } = element.extraAttributes;
   return (
     <div className="flex flex-col gap-2 w-full border-2 border-yellow-600">
       <label className="text-muted-foreground">
-       Paragraph Field:
+        Paragraph Field:
         <p className="t">{text}</p>
       </label>
     </div>
   );
 }
-function propertiesComponent({
+function PropertiesComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
@@ -92,7 +91,7 @@ function propertiesComponent({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",
     defaultValues: {
-      text:element.extraAttributes.text,
+      text: element.extraAttributes.text,
     },
   });
   useEffect(() => {
@@ -100,7 +99,7 @@ function propertiesComponent({
   }, [element, form]);
 
   function applyChanges(values: propertiesFormScehmaType) {
-    const { text} = values;
+    const { text } = values;
     updateElement(element.id, {
       ...element,
       extraAttributes: {
@@ -124,8 +123,8 @@ function propertiesComponent({
             <FormItem>
               <FormLabel>Label</FormLabel>
               <FormControl>
-                      <Textarea
-                      rows={5}
+                <Textarea
+                  rows={5}
                   {...field}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") e.currentTarget.blur();
@@ -136,7 +135,6 @@ function propertiesComponent({
             </FormItem>
           )}
         />
-  
       </form>
     </Form>
   );

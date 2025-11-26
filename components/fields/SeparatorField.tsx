@@ -1,13 +1,26 @@
-"use client"
+"use client";
 import { RiSeparator } from "react-icons/ri";
-import { ElementsType, FormElement, FormElementInstance, submitfunction } from '../FormElements';
+import {
+  ElementsType,
+  FormElement,
+  FormElementInstance,
+  submitfunction,
+} from "../FormElements";
 import { Input } from "../ui/input";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import z from "zod";
 import { useEffect, useState } from "react";
 import useDesigner from "../hooks/useDesigner";
-import {Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../ui/form";
 import { Switch } from "../ui/switch";
 import { cn } from "@/lib/utils";
 import { Separator } from "../ui/separator";
@@ -25,17 +38,16 @@ export const SeparatorFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: () => true,
 };
 
 function FormComponent({
-  elementInstance,}: {
+  elementInstance,
+}: {
   elementInstance: FormElementInstance;
 }) {
-  return (
- <Separator />
-  );
+  return <Separator />;
 }
 function DesignerComponent({
   elementInstance,
@@ -45,16 +57,16 @@ function DesignerComponent({
   return (
     <div className="flex flex-col gap-2 w-full border-2 border-yellow-600">
       <label className="text-muted-foreground">
-       Separator field:
-     <Separator/>
+        Separator field:
+        <Separator />
       </label>
     </div>
   );
 }
-function propertiesComponent({elementInstance,}: {
+function PropertiesComponent({
+  elementInstance,
+}: {
   elementInstance: FormElementInstance;
 }) {
-  return (
-   <p>No properties for this element</p>
-  );
+  return <p>No properties for this element</p>;
 }

@@ -6,7 +6,6 @@ import SaveFormbtn from "./SaveFormbtn";
 import PublishFormbtn from "./PublishFormbtn";
 import {
   DndContext,
-  DragOverlay,
   MouseSensor,
   TouchSensor,
   useSensor,
@@ -22,7 +21,6 @@ import { toast } from "./ui/use-toast";
 import Link from "next/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import Confetti from "react-confetti";
-import { FaBullseye } from "react-icons/fa";
 const FormBuilder = ({ form }: { form: Form }) => {
   const { setElements, setSelectedElement } = useDesigner();
   const [isReady, setIsReady] = React.useState(false);
@@ -41,7 +39,7 @@ const FormBuilder = ({ form }: { form: Form }) => {
     setSelectedElement(null);
     const readyTimeout = setTimeout(() => setIsReady(true), 500);
     return () => clearTimeout(readyTimeout);
-  }, [form, setElements,setSelectedElement]);
+  }, [form, setElements,setSelectedElement,isReady]);
   if (!isReady) {
     return (
       <div className="flex items-center justify-center w-full h-full">
@@ -103,7 +101,7 @@ const FormBuilder = ({ form }: { form: Form }) => {
   return (
     <DndContext sensors={[mouseSensor, touchSensor]}>
       <main className="flex flex-col w-full">
-        <nav className="flex jb border-b-2 p-4 gap-3 items-center">
+        <nav className="flex justify-between border-b-2 p-4 gap-3 items-center">
           <h2 className="truncate font-medium">
             <span className="text-muted-foreground mr-2">Form:</span>{" "}
             {form.name}
@@ -118,11 +116,11 @@ const FormBuilder = ({ form }: { form: Form }) => {
             )}
           </div>
         </nav>
-        <div className="flex w-full h-fit flex-grow items-center justify-center relative overflow-auto bg-accent bg-cover bg-[radial-gradient(ellipse_at_top,#f8fafc,#e2e8f0_60%)] dark:bg-[radial-gradient(ellipse_at_top,#1a1f2b,#0e1117_60%)]">
+        <div className="flex w-full flex-grow items-center justify-center relative overflow-y-auto h-[750px] bg-accent bg-cover bg-[radial-gradient(ellipse_at_top,#f8fafc,#e2e8f0_60%)] dark:bg-[radial-gradient(ellipse_at_top,#1a1f2b,#0e1117_60%)]">
           <Designer />
         </div>
       </main>
-      <DragOverlayWrapper />
+      {/* <DragOverlayWrapper /> */}
     </DndContext>
   );
 };

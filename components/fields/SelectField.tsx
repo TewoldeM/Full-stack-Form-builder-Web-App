@@ -32,13 +32,15 @@ import { Button } from "../ui/button";
 import { toast } from "../ui/use-toast";
 
 const type: ElementsType = "SelectField";
+
 const extraAttributes = {
   lable: "Select field",
   helpertext: "Helper text",
   required: false,
   placeHolder: "Value here ...",
-  options: [],
+  options: [] as string[],
 };
+
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   helpertext: z.string().max(200),
@@ -46,6 +48,7 @@ const propertiesSchema = z.object({
   placeHolder: z.string().max(50),
   options: z.array(z.string()).default([]),
 });
+
 export const SelectFieldFormElement: FormElement = {
   type,
   construct: (id: string) => ({
@@ -59,7 +62,7 @@ export const SelectFieldFormElement: FormElement = {
   },
   designerComponent: DesignerComponent,
   formComponent: FormComponent,
-  propertiesComponent: propertiesComponent,
+  PropertiesComponent: PropertiesComponent,
   validate: (
     formElement: FormElementInstance,
     currentvalue: string
@@ -71,17 +74,22 @@ export const SelectFieldFormElement: FormElement = {
     return true;
   },
 };
+
 type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes;
 };
+
 type propertiesFormScehmaType = z.infer<typeof propertiesSchema>;
+
+/* ---------------------- Designer Component ---------------------- */
 function DesignerComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
-  const { label, required, placeHolder, helperText } = element.extraAttributes;
+  const { label, required, placeHolder, helpertext } = element.extraAttributes;
+
   return (
     <div className="flex flex-col gap-2 w-full border-2 border-yellow-600">
       <label>
@@ -92,13 +100,15 @@ function DesignerComponent({
         <SelectTrigger className="w-full">
           <SelectValue placeholder={placeHolder} />
         </SelectTrigger>
-      </Select>{" "}
-      {helperText && (
-        <p className="text-muted-foreground text-[0.8rem]">{helperText}</p>
+      </Select>
+      {helpertext && (
+        <p className="text-muted-foreground text-[0.8rem]">{helpertext}</p>
       )}
     </div>
   );
 }
+
+/* ---------------------- Form Component ---------------------- */
 function FormComponent({
   elementInstance,
   submitvalue,
@@ -113,24 +123,33 @@ function FormComponent({
   const element = elementInstance as CustomInstance;
   const [value, setValue] = useState(defaultvalue || "");
   const [error, setError] = useState<boolean>(false);
+
+  // ✅ fixed useEffect dependency
   useEffect(() => {
-    setError(isInvalid === true), [isInvalid];
-  });
-  const { label, required, placeHolder, helperText,options } = element.extraAttributes;
+    setError(isInvalid === true);
+  }, [isInvalid]);
+
+  const { label, required, placeHolder, helpertext, options } =
+    element.extraAttributes;
+
   return (
     <div className="flex flex-col gap-4 p-4 w-full border-2 border-gray-100 dark:border-gray-800">
       <label className={cn(error && "text-red-500")}>
         {label}
         {required && "*"}
       </label>
-      <Select defaultValue={value} onValueChange={(value) => {
-        setValue(value)
-        if (!submitvalue) return
-        const valid = SelectFieldFormElement.validate(element, value);
-        setError(!valid)
-        submitvalue(element.id, value);
-      }}>
-        <SelectTrigger className={cn("w-full", error && "border-red-500")} >
+
+      <Select
+        defaultValue={value}
+        onValueChange={(value) => {
+          setValue(value);
+          if (!submitvalue) return;
+          const valid = SelectFieldFormElement.validate(element, value);
+          setError(!valid);
+          submitvalue(element.id, value);
+        }}
+      >
+        <SelectTrigger className={cn("w-full", error && "border-red-500")}>
           <SelectValue placeholder={placeHolder} />
         </SelectTrigger>
         <SelectContent>
@@ -141,63 +160,60 @@ function FormComponent({
           ))}
         </SelectContent>
       </Select>
-      {helperText && (
+
+      {helpertext && (
         <p
           className={cn(
             "text-muted-foreground text-[0.8rem]",
             error && "text-red-500"
           )}
         >
-          {helperText}
+          {helpertext}
         </p>
       )}
     </div>
   );
 }
 
-function propertiesComponent({
+/* ---------------------- Properties Component ---------------------- */
+function PropertiesComponent({
   elementInstance,
 }: {
   elementInstance: FormElementInstance;
 }) {
   const element = elementInstance as CustomInstance;
-  const { updateElement,setSelectedElement } = useDesigner();
+  const { updateElement, setSelectedElement } = useDesigner();
+
   const form = useForm<propertiesFormScehmaType>({
     resolver: zodResolver(propertiesSchema),
     mode: "onBlur",
     defaultValues: {
       label: element.extraAttributes.lable,
-      helpertext: element.extraAttributes.helperText,
+      helpertext: element.extraAttributes.helpertext,
       required: element.extraAttributes.required,
       placeHolder: element.extraAttributes.placeHolder,
-      options:element.extraAttributes.options
+      options: element.extraAttributes.options,
     },
   });
+
   useEffect(() => {
     form.reset(element.extraAttributes);
   }, [element, form]);
 
   function applyChanges(values: propertiesFormScehmaType) {
-    const { label, helpertext, placeHolder, required,options } = values;
+    const { label, helpertext, placeHolder, required, options } = values;
     updateElement(element.id, {
       ...element,
-      extraAttributes: {
-        label,
-        helpertext,
-        placeHolder,
-        required,
-        options
-      },
-
+      extraAttributes: { label, helpertext, placeHolder, required, options },
     });
-    toast({ title: "success" ,
-      description: "Properties Saves Successfully"
-    })
-    setSelectedElement(null)
+    toast({ title: "Success", description: "Properties Saved Successfully" });
+    setSelectedElement(null);
   }
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(applyChanges)} className="space-y-3">
+        {/* Label */}
         <FormField
           control={form.control}
           name="label"
@@ -213,13 +229,15 @@ function propertiesComponent({
                 />
               </FormControl>
               <FormDescription>
-                The lable of the field. <br /> It will be displayed above the
+                The label of the field. <br /> It will be displayed above the
                 fields
               </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/* Placeholder */}
         <FormField
           control={form.control}
           name="placeHolder"
@@ -239,12 +257,14 @@ function propertiesComponent({
             </FormItem>
           )}
         />
+
+        {/* Helpertext */}
         <FormField
           control={form.control}
           name="helpertext"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>helpertext"</FormLabel>
+              <FormLabel>helpertext &quot;</FormLabel>
               <FormControl>
                 <Input
                   {...field}
@@ -253,19 +273,22 @@ function propertiesComponent({
                   }}
                 />
               </FormControl>
-              <FormDescription>The helpertext"</FormDescription>
+              <FormDescription>The helpertext &quot;</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <Separator />
+
+        {/* Options */}
         <FormField
           control={form.control}
           name="options"
           render={({ field }) => (
             <FormItem>
               <div className="flex justify-between items-center">
-                <FormLabel>Options"</FormLabel>
+                <FormLabel>Options &quot;</FormLabel>
                 <Button
                   variant={"outline"}
                   className="gap-2"
@@ -278,15 +301,16 @@ function propertiesComponent({
                   Add
                 </Button>
               </div>
+
               <div className="flex flex-col gap-2">
                 {form.watch("options").map((option, index) => (
-                  <div className="flex ic justify-between gap-1" key={index}>
+                  <div className="flex justify-between gap-1" key={index}>
                     <Input
-                      placeholder=""
                       value={option}
                       onChange={(e) => {
-                        field.value[index] = e.target.value;
-                        field.onChange(field.value);
+                        const newOptions = [...field.value];
+                        newOptions[index] = e.target.value;
+                        field.onChange(newOptions);
                       }}
                     />
                     <Button
@@ -295,7 +319,7 @@ function propertiesComponent({
                       onClick={(e) => {
                         e.preventDefault();
                         const newOptions = [...field.value];
-                        newOptions.slice(index, 1);
+                        newOptions.splice(index, 1);
                         field.onChange(newOptions);
                       }}
                     >
@@ -304,20 +328,24 @@ function propertiesComponent({
                   </div>
                 ))}
               </div>
-              <FormDescription>The helpertext"</FormDescription>
+
+              <FormDescription>The helpertext &quot;</FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
+
         <Separator />
+
+        {/* Required */}
         <FormField
           control={form.control}
           name="required"
           render={({ field }) => (
             <FormItem className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <FormLabel>required"</FormLabel>
-                <FormDescription>The helpertext"</FormDescription>
+                <FormLabel>required &quot;</FormLabel>
+                <FormDescription>The helpertext &quot;</FormDescription>
               </div>
               <FormControl>
                 <Switch
@@ -329,7 +357,9 @@ function propertiesComponent({
             </FormItem>
           )}
         />
+
         <Separator />
+
         <Button className="w-full" type="submit">
           Save
         </Button>
