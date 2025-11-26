@@ -30,7 +30,6 @@ export default function RootLayout({
           <DesignerContextProvider>
             <nav className="flex justify-between border-b border-border h-[80px] px-4 py-2">
               <Logo />
-
               <div className="flex gap-4 items-center">
                 <SignedIn>
                   <Link href={"/dashboard"}>
