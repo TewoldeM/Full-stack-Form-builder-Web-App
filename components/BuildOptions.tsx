@@ -49,13 +49,13 @@ const BuildOptions = () => {
               </div>
             </div>
 
-            <h3 className="text-3xl font-bold text-foreground text-center mb-4">
+            <h3 className="text-4xl font-bold text-foreground text-center mb-4">
               AI MAGIC TIME
             </h3>
 
-            <p className="text-center text-foreground mb-2">
+            <p className="text-center text-gray-700 mb-2 text-lg">
               Just tell our AI what you need and watch it create a{" "}
-              <span className="bg-brand-yellow px-2 py-1 font-bold">
+              <span className="bg-yellow-500 px-2 py-1 font-bold text-black">
                 PERFECT
               </span>{" "}
               form in seconds!

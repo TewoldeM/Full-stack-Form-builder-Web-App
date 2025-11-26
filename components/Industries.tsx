@@ -91,18 +91,18 @@ const Industries = () => {
               className={`${industry.bgColor} ${industry.borderColor} border-4 rounded-2xl p-6 hover:shadow-xl transition-shadow`}
             >
               <div className="flex items-center gap-3 mb-4">
-                <industry.icon className="w-8 h-8 text-foreground" />
+                <industry.icon className="w-10 h-10 text-foreground" />
               </div>
 
-              <h3 className="text-2xl font-bold text-foreground mb-2">
+              <h3 className="text-3xl font-bold text-foreground mb-2">
                 {industry.title}
               </h3>
 
-              <p className="text-foreground mb-4">{industry.description}</p>
+              <p className="text-foreground mb-4 text-lg">{industry.description}</p>
 
-              <ul className="space-y-2 mb-6">
+              <ul className="space-y-3 mb-6">
                 {industry.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center gap-2 text-sm">
+                  <li key={idx} className="flex items-center gap-2 text-lg">
                     <span className="text-brand-green">✓</span>
                     <span className="font-bold text-foreground">{feature}</span>
                   </li>
@@ -120,7 +120,7 @@ const Industries = () => {
           <p className="text-muted-foreground mb-4">
             Don't see your industry? We've got solutions for 25+ categories!
           </p>
-          <button className="px-8 py-4 bg-brand-pink text-white rounded-lg hover:bg-brand-pink/90 transition-colors font-bold text-lg">
+          <button className="px-8 py-4 bg-pink-500 text-white rounded-lg hover:bg-brand-pink/90 transition-colors font-bold text-lg">
             📋 EXPLORE ALL TEMPLATES
           </button>
         </div>

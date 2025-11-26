@@ -15,7 +15,7 @@ const Pricing = () => {
       ],
       buttonText: "🚀 GET STARTED",
       buttonClass: "bg-brand-blue text-white hover:bg-brand-blue/90",
-      bgColor: "bg-cardBg-blue",
+      bgColor: "bg-blue-50",
       borderColor: "border-brand-blue",
       badge: null,
     },
@@ -33,7 +33,7 @@ const Pricing = () => {
       ],
       buttonText: "🌟 GET STARTED",
       buttonClass: "bg-brand-purple text-white hover:bg-brand-purple/90",
-      bgColor: "bg-cardBg-purple",
+      bgColor: "bg-purple-50",
       borderColor: "border-brand-purple",
       badge: "⚡ MOST POPULAR",
     },
@@ -51,7 +51,7 @@ const Pricing = () => {
       ],
       buttonText: "📋 LEARN MORE",
       buttonClass: "bg-brand-green text-white hover:bg-brand-green/90",
-      bgColor: "bg-cardBg-green",
+      bgColor: "bg-green-50",
       borderColor: "border-brand-green",
       badge: null,
     },
@@ -63,7 +63,7 @@ const Pricing = () => {
       className="w-full py-20 bg-gradient-to-b from-white to-brand-blueLight"
     >
       <div className="container mx-auto px-4">
-        <h2 className="text-4xl md:text-5xl font-bold text-center mb-4">
+        <h2 className="text-5xl md:text-6xl font-bold text-center mb-4">
           Simple, Transparent Pricing
         </h2>
 
@@ -71,7 +71,7 @@ const Pricing = () => {
           Choose the plan that fits your needs. No hidden fees, no surprises.
         </p>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-12">
+        <div className="grid md:grid-cols-3 gap-8 max-w-7xl mx-auto mb-12">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -117,7 +117,7 @@ const Pricing = () => {
           <p className="text-muted-foreground mb-4">
             Need a custom enterprise solution?
           </p>
-          <button className="px-8 py-3 bg-navy text-white rounded-lg hover:bg-navy-light transition-colors font-bold">
+          <button className="px-8 py-3 bg-gray-900 text-white rounded-lg hover:bg-navy-light transition-colors font-bold">
             Contact Sales for Enterprise
           </button>
         </div>

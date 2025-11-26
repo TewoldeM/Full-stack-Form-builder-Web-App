@@ -58,8 +58,8 @@ const Features = () => {
               key={index}
               className="bg-white rounded-xl p-8 border border-border hover:shadow-lg transition-shadow"
             >
-              <div className="w-14 h-14 bg-gradient-to-br from-brand-blue to-brand-purple rounded-lg flex items-center justify-center mb-6">
-                <feature.icon className="w-7 h-7 text-white" />
+              <div className="w-14 h-14 bg-blue-500 to-brand-purple rounded-lg flex items-center justify-center mb-6">
+                <feature.icon className="w-8 h-8 text-white" />
               </div>
 
               <h3 className="text-xl font-bold text-foreground mb-3">
